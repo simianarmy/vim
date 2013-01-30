@@ -3,4 +3,4 @@ vim
 
 Vim configs and plugins
 
-My .vim file and .vimrc directory
+My .vimrc file and .vim directory
