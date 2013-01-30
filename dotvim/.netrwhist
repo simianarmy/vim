@@ -1,0 +1,11 @@
+let g:netrw_dirhistmax  =10
+let g:netrw_dirhist_cnt =9
+let g:netrw_dirhist_1='/Users/marcmauger/Documents/code/casino/branches/mobile/www/application/layouts/scripts'
+let g:netrw_dirhist_2='/Users/marcmauger/Documents/code/casino/branches/mobile-gifting'
+let g:netrw_dirhist_3='/Users/marcmauger/Documents/code/casino/branches/mobile-gifting/mobile/src/templates/casino/labels'
+let g:netrw_dirhist_4='/Users/marcmauger/Documents/code/casino/branches/mobile-gifting/www/content/mobile/scripts/libraries/dd/objects'
+let g:netrw_dirhist_5='/Users/marcmauger/Documents/code/casino/branches/mobile'
+let g:netrw_dirhist_6='/Users/marcmauger/Documents/code/casino/branches/mobile-gifting'
+let g:netrw_dirhist_7='/Users/marcmauger/Documents/code/casino/branches/mobile-gifting/www'
+let g:netrw_dirhist_8='/Users/marcmauger/Documents/code/casino/branches/mobile-gifting/www/application'
+let g:netrw_dirhist_9='/Users/marcmauger/Documents/code/casino/branches/mobile-gifting/www/application/configs'
