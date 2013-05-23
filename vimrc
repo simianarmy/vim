@@ -1,14 +1,17 @@
 set nocompatible
 "Enable pathogen
 call pathogen#infect()
+call pathogen#helptags()
 " KEEP THIS AUTOCMD AT THE TOP!
 " Remove ALL autocommands for the current group.
-:autocmd!	
+if (has("autocmd"))
+    :autocmd!	
+    filetype on
+    filetype plugin on
+    filetype indent on
+endif
 
 "Enable filetypes
-filetype on
-filetype plugin on
-filetype indent on
 syntax on
 ""Write the old file out when switching between files.
 set autowrite
