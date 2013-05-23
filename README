@@ -1,0 +1,13 @@
+vim
+===
+
+Vim configs and plugins
+
+My .vimrc file and .vim directory
+
+To install:
+
+git clone git@github.com:simianarmy/vim.git ~/.vim
+
+ln -s ~/.vim/vimrc ~/.vimrc
+

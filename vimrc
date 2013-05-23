@@ -109,11 +109,11 @@ imap jj <esc>
 nmap <silent> ,da :exec "1," . bufnr('$') . "bd"<cr>
 "Bubble single lines (kicks butt)
 ""http://vimcasts.org/episodes/bubbling-text/
-nmap <C-Up> ddkP
-nmap <C-Down> ddp
+nmap <C-k> ddkP
+nmap <C-j> ddp
 "Bubble multiple lines
-"vmap <C-Up> xkP`[V`]
-"vmap <C-Down> xp`[V`]
+vmap <C-k> xkP`[V`]
+vmap <C-j> xp`[V`]
 "" Source the vimrc file after saving it. This way, you don't have to reload
 "Vim to see the changes.
 if has("autocmd")
@@ -173,11 +173,15 @@ au BufNewFile,BufRead *.soy set filetype=xml
 " " print empty <a> tag
 map! ;h <a href=""></a><ESC>5hi
 
-nmap <F8> :TagbarToggle<CR>
-
 " Buildproj casino shortcuts
-command! BP :!python mobile/tools/buildproj.py --update
+command! BP :!python mobile/tools/buildproj.py --updateDeps
 command! BPP :!python mobile/tools/buildproj.py --preflight
+
+" Toggle exuberant-ctags sidebar
+nmap tb :TlistToggle<cr>
+
+" lint js
+autocmd bufwritepost *.js !jshint <afile>
 
 " Compile soy template
 "au BufWrite */templates/*.soy !python mobile/tools/buildproj.py -genTemplate %:p
@@ -186,6 +190,7 @@ command! BPP :!python mobile/tools/buildproj.py --preflight
 
 set path+=www/content/mobile/scripts/libraries/**
 set path+=www/content/mobile/scripts/libs/closure/**
+set path+=www/content/mobile/libs/**
 set path+=mobile/src/**
-set path+=mobile/tools/**
+set path+=moile/tools/**
 

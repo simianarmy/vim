@@ -1,1 +1,0 @@
-rdoc-1.1.2.vba: call delete('/Users/marcmauger/.vim/ftdetect/rdoc.vim')|call delete('/Users/marcmauger/.vim/snippets/rdoc.snippets')|call delete('/Users/marcmauger/.vim/syntax/rdoc.vim')
