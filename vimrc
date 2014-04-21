@@ -3,12 +3,10 @@ filetype on
 filetype off
 call pathogen#infect()
 call pathogen#helptags()
+syntax on
 filetype plugin indent on
 
 set nocompatible
-
-" enable syntax highlighting
-syntax enable
 
 " Write the old file out when switching between files.
 set autowrite
@@ -40,7 +38,7 @@ set wildmenu                                                 " show a navigable 
 " Show command in bottom right portion of the screen
 set showcmd
 " Show lines numbers
-set number
+" set number
 " Prefer relative line numbering?
 " set relativenumber
 " Indent stuff
@@ -170,8 +168,8 @@ au BufNewFile,BufRead *.soy set filetype=xml
 "set showmatch " show matching brackets
 
 " Buildproj casino shortcuts
-command! BP :!python mobile/tools/buildproj.py --updateDeps
-command! BPP :!python mobile/tools/buildproj.py --preflight
+command! BP :!python app/sdk/tools/buildproj.py --updateDeps
+command! BPP :!python app/sdk/tools/buildproj.py --preflight
 
 " Toggle exuberant-ctags sidebar
 nmap tb :TlistToggle<cr>
@@ -185,13 +183,9 @@ let g:ctrlp_custom_ignore = '\v[\/]\.(git|hg|svn)$'
 "au BufWrite */templates/*.soy !python mobile/tools/buildproj.py -genTemplate %:p
 " Compile sass
 "au BufWrite */stylesheets/*.scss !sass --update --force /Users/marcmauger/Documents/code/casino/branches/mobile/mobile/src/stylesheets/sass/:/Users/marcmauger/Documents/code/casino/branches/mobile/www/content/mobile/stylesheets 
-
-set path+=www/content/mobile/scripts/libraries/**
-set path+=www/content/mobile/scripts/libs/closure/**
-set path+=www/content/mobile/libs/**
-set path+=mobile/src/**
-set path+=mobile/tools/**
-set path+=spec/javascripts/dd/**
+set path+=app/src/**
+set path+=app/sdk/libs/dd/**
+set path+=build/www/application/**
 
 " Go crazy!
 if filereadable(expand("~/.vimrc.local"))
