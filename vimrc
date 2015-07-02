@@ -1,10 +1,15 @@
 " set up pathogen, https://github.com/tpope/vim-pathogen
+set shell=bash
 filetype on 
 filetype off
 call pathogen#infect()
 call pathogen#helptags()
 syntax on
 filetype plugin indent on
+
+python from powerline.vim import setup as powerline_setup
+python powerline_setup()
+python del powerline_setup
 
 set nocompatible
 
@@ -94,7 +99,7 @@ nmap <leader>] :TagbarToggle<CR>
 nmap <leader><space> :call whitespace#strip_trailing()<CR>
 nmap <leader>g :GitGutterToggle<CR>
 nmap <leader>c <Plug>Kwbd
-map <silent> <leader>V :source ~/.vimrc<CR>:filetype detect<CR>:exe ":echo 'vimrc reloaded'"<CR>
+map <silent> <leader>V :source ~/.vim/vimrc<CR>:filetype detect<CR>:exe ":echo 'vimrc reloaded'"<CR>
 " Faster shortcut for commenting. Requires T-Comment plugin
 " map <leader>c <c-_><c-_>
 " Opens a vertical split and switches over (\v)
@@ -116,11 +121,11 @@ imap jj <esc>
 nmap <silent> ,da :exec "1," . bufnr('$') . "bd"<cr>
 " Bubble single lines (kicks butt)
 " http://vimcasts.org/episodes/bubbling-text/
-nmap <C-k> ddkP
-nmap <C-j> ddp
+nmap <C-Up> ddkP
+nmap <C-Down> ddp
 " Bubble multiple lines
-vmap <C-k> xkP`[V`]
-vmap <C-j> xp`[V`]
+vmap <C-Up> xkP`[V`]
+vmap <C-Down> xp`[V`]
 " Source the vimrc file after saving it. This way, you don't have to reload
 " Vim to see the changes.
 if has("autocmd")
@@ -171,11 +176,29 @@ au BufNewFile,BufRead *.soy set filetype=xml
 command! BP :!python app/sdk/tools/buildproj.py --updateDeps
 command! BPP :!python app/sdk/tools/buildproj.py --preflight
 
+command! JSON :%!python -m json.tool
+
 " Toggle exuberant-ctags sidebar
 nmap tb :TlistToggle<cr>
 
+function! SearchJs(string)
+    execute ":vimgrep /" . a:string . "/ app**/*.js"
+endfunction
+function! SearchSoy(string)
+    execute ":vimgrep /" . a:string . "/ app**/*.soy"
+endfunction
+
 " lint js
 " autocmd bufwritepost *.js !jshint <afile>
+
+" syntastic settings
+let g:syntastic_always_populate_loc_list = 1
+let g:syntastic_auto_loc_list = 1
+let g:syntastic_check_on_open = 1
+let g:syntastic_check_on_wq = 1
+
+let g:syntastic_javascript_checkers = ['jscs']
+autocmd FileType javascript let b:syntastic_checkers = findfile('.jscsrc', '.;') != '' ? ['jscs'] : ['jshint']
 
 " For ctrlp.vim
 let g:ctrlp_custom_ignore = '\v[\/]\.(git|hg|svn)$'
@@ -184,8 +207,10 @@ let g:ctrlp_custom_ignore = '\v[\/]\.(git|hg|svn)$'
 " Compile sass
 "au BufWrite */stylesheets/*.scss !sass --update --force /Users/marcmauger/Documents/code/casino/branches/mobile/mobile/src/stylesheets/sass/:/Users/marcmauger/Documents/code/casino/branches/mobile/www/content/mobile/stylesheets 
 set path+=app/src/**
-set path+=app/sdk/libs/dd/**
+set path+=app/sdk/src/**
+set path+=app/demos/**
 set path+=build/www/application/**
+set tags+=./app/tags,./build/tags,tags
 
 " Go crazy!
 if filereadable(expand("~/.vimrc.local"))
