@@ -184,7 +184,9 @@ let g:ctrlp_custom_ignore = '\v[\/]\.(git|hg|svn)$'
 " Compile sass
 "au BufWrite */stylesheets/*.scss !sass --update --force /Users/marcmauger/Documents/code/casino/branches/mobile/mobile/src/stylesheets/sass/:/Users/marcmauger/Documents/code/casino/branches/mobile/www/content/mobile/stylesheets 
 set path+=app/src/**
+set path+=app/src/libs/dd/**
 set path+=app/sdk/libs/dd/**
+set path+=app/sdk/src/dd/**
 set path+=build/www/application/**
 
 " Go crazy!
