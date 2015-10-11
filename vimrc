@@ -7,11 +7,30 @@ call pathogen#helptags()
 syntax on
 filetype plugin indent on
 
+set nocompatible
+
+" These lines setup the environment to show graphics and colors correctly.
+set rtp+=~/.vim/bundle/powerline/powerline/bindings/vim
+set nocompatible
+set t_Co=256
+ 
+let g:minBufExplForceSyntaxEnable = 1
 python from powerline.vim import setup as powerline_setup
 python powerline_setup()
 python del powerline_setup
-
-set nocompatible
+ 
+if ! has('gui_running')
+   set ttimeoutlen=10
+   augroup FastEscape
+      autocmd!
+      au InsertEnter * set timeoutlen=0
+      au InsertLeave * set timeoutlen=1000
+   augroup END
+endif
+ 
+set laststatus=2 " Always display the statusline in all windows
+set guifont=DejaVu\ Sans\ Mono\ for\ Powerline:h14
+set noshowmode " Hide the default mode text (e.g. -- INSERT -- below the statusline)
 
 " Write the old file out when switching between files.
 set autowrite
@@ -99,7 +118,7 @@ nmap <leader>] :TagbarToggle<CR>
 nmap <leader><space> :call whitespace#strip_trailing()<CR>
 nmap <leader>g :GitGutterToggle<CR>
 nmap <leader>c <Plug>Kwbd
-map <silent> <leader>V :source ~/.vim/vimrc<CR>:filetype detect<CR>:exe ":echo 'vimrc reloaded'"<CR>
+map <silent> <leader>V :source ~/.vimrc<CR>:filetype detect<CR>:exe ":echo 'vimrc reloaded'"<CR>
 " Faster shortcut for commenting. Requires T-Comment plugin
 " map <leader>c <c-_><c-_>
 " Opens a vertical split and switches over (\v)
@@ -173,7 +192,7 @@ au BufNewFile,BufRead *.soy set filetype=xml
 "set showmatch " show matching brackets
 
 " Buildproj casino shortcuts
-command! BP :!python app/sdk/tools/buildproj.py --updateDeps
+command! BP :!python app/sdk/tools/buildproj.py --bl
 command! BPP :!python app/sdk/tools/buildproj.py --preflight
 
 command! JSON :%!python -m json.tool
@@ -199,6 +218,12 @@ let g:syntastic_check_on_wq = 1
 
 let g:syntastic_javascript_checkers = ['jscs']
 autocmd FileType javascript let b:syntastic_checkers = findfile('.jscsrc', '.;') != '' ? ['jscs'] : ['jshint']
+
+" Elm bindings
+nnoremap <leader>el :ElmEvalLine<CR>
+vnoremap <leader>es :<C-u>ElmEvalSelection<CR>
+nnoremap <leader>em :ElmMakeCurrentFile<CR>
+au BufWritePost *.elm ElmMakeFile("Main.elm")
 
 " For ctrlp.vim
 let g:ctrlp_custom_ignore = '\v[\/]\.(git|hg|svn)$'
