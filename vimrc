@@ -96,7 +96,7 @@ nmap <leader>b :CtrlPBuffer<CR>
 nmap <leader>t :CtrlP<CR>
 nmap <leader>T :CtrlPClearCache<CR>:CtrlP<CR>
 nmap <leader>] :TagbarToggle<CR>
-nmap <leader><space> :call whitespace#strip_trailing()<CR>
+nmap <leader><space> :StripWhitespace<CR>
 nmap <leader>g :GitGutterToggle<CR>
 nmap <leader>c <Plug>Kwbd
 map <silent> <leader>V :source ~/.vim/vimrc<CR>:filetype detect<CR>:exe ":echo 'vimrc reloaded'"<CR>
@@ -175,8 +175,8 @@ au BufNewFile,BufRead *.soy set filetype=xml
 " Buildproj casino shortcuts
 command! BP :!python app/sdk/tools/buildproj.py --updateDeps
 command! BPP :!python app/sdk/tools/buildproj.py --preflight
-
 command! JSON :%!python -m json.tool
+command! JSCS :%!jscs -x %
 
 " Toggle exuberant-ctags sidebar
 nmap tb :TlistToggle<cr>
@@ -193,8 +193,8 @@ endfunction
 
 " syntastic settings
 let g:syntastic_always_populate_loc_list = 1
-let g:syntastic_auto_loc_list = 1
-let g:syntastic_check_on_open = 1
+let g:syntastic_auto_loc_list = 0
+let g:syntastic_check_on_open = 0
 let g:syntastic_check_on_wq = 1
 
 let g:syntastic_javascript_checkers = ['jscs']
