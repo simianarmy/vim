@@ -1,19 +1,39 @@
 " set up pathogen, https://github.com/tpope/vim-pathogen
 set shell=bash
-filetype on 
 filetype off
 call pathogen#infect()
 call pathogen#helptags()
 syntax on
 filetype plugin indent on
 
-set nocompatible
+" Set the color scheme. Change this to your preference.
+" Here's 100 to choose from:
+" http://www.vim.org/scripts/script.php?script_id=625
+" colorscheme molokai
+silent! colorscheme solarized
 
 " These lines setup the environment to show graphics and colors correctly.
 set rtp+=~/.vim/bundle/powerline/powerline/bindings/vim
 set nocompatible
 set t_Co=256
- 
+set nocompatible
+set background=dark
+
+ " set the runtime path to include Vundle and initialize
+set rtp+=~/.vim/bundle/Vundle.vim
+call vundle#begin()
+  Plugin 'gmarik/Vundle.vim'
+  Plugin 'kien/ctrlp.vim'
+  Plugin 'scrooloose/nerdtree'
+  Plugin 'tpope/vim-surround'
+  Plugin 'tpope/vim-unimpaired'
+  Plugin 'tpope/vim-repeat'
+  Plugin 'altercation/vim-colors-solarized'
+  Plugin 'rking/ag.vim'
+  Plugin 'terryma/vim-multiple-cursors'
+  Plugin 'Valloric/YouCompleteMe'
+call vundle#end()            " required
+
 let g:minBufExplForceSyntaxEnable = 1
 python from powerline.vim import setup as powerline_setup
 python powerline_setup()
@@ -39,6 +59,7 @@ set backupcopy=yes                                           " see :help crontab
 set clipboard=unnamed                                        " yank and paste with the system clipboard
 set directory-=.                                             " don't store swapfiles in the current directory
 set encoding=utf-8
+set visualbell
 " Display current cursor position in lower right corner.
 set ruler
 set scrolloff=3                                              " show context above/below cursorline
@@ -46,10 +67,7 @@ set scrolloff=3                                              " show context abov
 set timeoutlen=500
 " Switch between buffers without saving
 set hidden
-" Set the color scheme. Change this to your preference.
-" Here's 100 to choose from:
-" http://www.vim.org/scripts/script.php?script_id=625
-colorscheme molokai
+
 " Set font type and size. Depends on the resolution. Larger screens, prefer h20
 set guifont=Menlo:h13
 " Tab stuff
@@ -106,6 +124,10 @@ set wildmenu
 set wildmode=longest,list,full
 " http://vim.wikia.com/wiki/Make_Vim_completion_popup_menu_work_just_like_in_an_IDE
 set completeopt=longest,menuone
+set diffopt=vertical
+" Terminal only
+" set modelines=1
+set laststatus=2 " required for airline
 
 " Want a different map leader than 
 let mapleader = ","
@@ -164,6 +186,9 @@ nmap <C-l> <C-w>l
 nmap <leader>d :NERDTreeToggle<CR>
 nmap <leader>f :NERDTreeFind<CR>
 
+" invert line numbers display
+nmap <leader>n :set invnumber<CR>
+
 " Spelling corrects. Just for example. Add yours below.
 iab teh the
 iab Teh The
@@ -191,21 +216,14 @@ au BufNewFile,BufRead *.soy set filetype=xml
 "noremap ; l
 "set showmatch " show matching brackets
 
-" Buildproj casino shortcuts
-command! BP :!python app/sdk/tools/buildproj.py --bl
-command! BPP :!python app/sdk/tools/buildproj.py --preflight
-command! JSON :%!python -m json.tool
-command! JSCS :%!jscs -x %
+"-------------------------
+" Auto-complete
+"-------------------------
+inoremap <expr><TAB>  pumvisible() ? "\<C-n>" : "\<TAB>"
+inoremap <expr><S-TAB>  pumvisible() ? "\<C-p>" : "\<S-TAB>"
 
 " Toggle exuberant-ctags sidebar
 nmap tb :TlistToggle<cr>
-
-function! SearchJs(string)
-    execute ":vimgrep /" . a:string . "/ app**/*.js"
-endfunction
-function! SearchSoy(string)
-    execute ":vimgrep /" . a:string . "/ app**/*.soy"
-endfunction
 
 " lint js
 " autocmd bufwritepost *.js !jshint <afile>
@@ -237,6 +255,28 @@ set path+=app/sdk/src/**
 set path+=app/demos/**
 set path+=build/www/application/**
 set tags+=./app/tags,./build/tags,tags
+
+"-------------------------
+" Ag
+"-------------------------
+map <Leader>f <ESC>:tabnew<CR>:Ag 
+map <Leader>F <ESC>:Ag 
+
+"-------------------------
+" YouCompleteMe
+"-------------------------
+let g:ycm_complete_in_strings = 1
+let g:ycm_collect_identifiers_from_comments_and_strings = 1
+let g:ycm_collect_identifiers_from_tags_files = 1
+
+" TODO
+" These should go in the work machine's .vimrc.local
+
+" Buildproj casino shortcuts
+command! BP :!python app/sdk/tools/buildproj.py --bl
+command! BPP :!python app/sdk/tools/buildproj.py --preflight
+command! JSON :%!python -m json.tool
+command! JSCS :%!jscs -x %
 
 " Go crazy!
 if filereadable(expand("~/.vimrc.local"))
