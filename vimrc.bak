@@ -2,7 +2,7 @@
 set shell=zsh
 filetype plugin indent on
 
-" set the runtime path to include Vundle and initialize
+ " set the runtime path to include Vundle and initialize
 set rtp+=~/.vim/bundle/Vundle.vim
 call vundle#begin()
   Plugin 'gmarik/Vundle.vim'
@@ -21,7 +21,7 @@ let g:minBufExplForceSyntaxEnable = 1
 python from powerline.vim import setup as powerline_setup
 python powerline_setup()
 python del powerline_setup
-
+ 
 if ! has('gui_running')
    set ttimeoutlen=10
    augroup FastEscape
@@ -30,7 +30,7 @@ if ! has('gui_running')
       au InsertLeave * set timeoutlen=1000
    augroup END
 endif
-
+ 
 " Set the color scheme. Change this to your preference.
 " Here's 100 to choose from:
 " solarized options
@@ -277,5 +277,3 @@ if filereadable(expand("~/.vimrc.local"))
   " noremap! jj <ESC>
   source ~/.vimrc.local
 endif
-
-
