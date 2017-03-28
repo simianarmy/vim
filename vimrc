@@ -15,6 +15,11 @@ call vundle#begin()
   Plugin 'rking/ag.vim'
   Plugin 'terryma/vim-multiple-cursors'
   Plugin 'Valloric/YouCompleteMe'
+  Plugin 'scrooloose/nerdcommenter'
+  Plugin 'ElmCast/elm-vim'
+  Plugin 'burnettk/vim-angular'
+  Plugin 'pangloss/vim-javascript'
+  Plugin 'leafgarland/typescript-vim'
 call vundle#end()            " required
 
 let g:minBufExplForceSyntaxEnable = 1
@@ -139,6 +144,8 @@ nnoremap <leader>v <C-w>v<C-w>l
 " Set up an HTML5 template for all new .html files
 autocmd BufNewFile * silent! 0r $VIMHOME/templates/%:e.tpl
 autocmd BufRead,BufNewFile *.md set filetype=markdown
+" use xml syntax highlighting for .soy
+autocmd BufNewFile,BufRead *.soy set filetype=xml
 " automatically rebalance windows on vim resize
 autocmd VimResized * :wincmd =
 " Saves time; maps the spacebar to colon
@@ -191,8 +198,6 @@ nmap <leader>hm :cd ~/ <CR>
 nmap <leader>bv :bel vsp
 " Saves file when Vim window loses focus
 " au FocusLost * :wa
-" use xml syntax highlighting for .soy
-au BufNewFile,BufRead *.soy set filetype=xml
 " " Backups
 "set backupdir=~/.vim/tmp/backup/ " backups
 "set directory=~/.vim/tmp/swap/ " swap files
@@ -227,10 +232,15 @@ autocmd FileType javascript let b:syntastic_checkers = findfile('.jscsrc', '.;')
 nnoremap <leader>el :ElmEvalLine<CR>
 vnoremap <leader>es :<C-u>ElmEvalSelection<CR>
 nnoremap <leader>em :ElmMakeCurrentFile<CR>
-au BufWritePost *.elm ElmMakeFile("Main.elm")
+" au BufWritePost *.elm ElmMakeFile("Main.elm")
 
 " For ctrlp.vim
 let g:ctrlp_custom_ignore = '\v[\/]\.(git|hg|svn)$'
+let g:ctrlp_match_window = 'bottom,order:btt,min:1,max:10,results:30'
+set wildignore+=*/generated/*
+set wildignore+=*.gz
+
+
 " Compile soy template
 "au BufWrite */templates/*.soy !python mobile/tools/buildproj.py -genTemplate %:p
 " Compile sass
@@ -246,7 +256,8 @@ set tags+=./app/tags,./build/tags,tags
 " Ag
 "-------------------------
 map <Leader>f <ESC>:tabnew<CR>:Ag 
-map <Leader>F <ESC>:Ag 
+map <Leader>F <ESC>:Ag
+map <Leader>fs <ESC>:tabnew<CR>:AgFromSearch<CR>
 
 "-------------------------
 " YouCompleteMe
@@ -254,6 +265,14 @@ map <Leader>F <ESC>:Ag
 let g:ycm_complete_in_strings = 1
 let g:ycm_collect_identifiers_from_comments_and_strings = 1
 let g:ycm_collect_identifiers_from_tags_files = 1
+
+"-------------------------
+"" NERDTree
+"-------------------------
+let NERDTreeIgnore = ['\.DS_Store', '\.idea', '\.git']
+"let NERDTreeQuitOnOpen = 1
+map <Leader>d :NERDTreeToggle<CR>
+map <Leader>D :NERDTreeFind<CR>
 
 " TODO
 " These should go in the work machine's .vimrc.local
