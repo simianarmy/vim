@@ -1,6 +1,7 @@
 " set up pathogen, https://github.com/tpope/vim-pathogen
 set shell=zsh
-filetype plugin indent on
+set nocompatible
+filetype off
 
 " set the runtime path to include Vundle and initialize
 set rtp+=~/.vim/bundle/Vundle.vim
@@ -21,6 +22,7 @@ call vundle#begin()
   Plugin 'pangloss/vim-javascript'
   Plugin 'leafgarland/typescript-vim'
 call vundle#end()            " required
+filetype plugin indent on
 
 let g:minBufExplForceSyntaxEnable = 1
 python from powerline.vim import setup as powerline_setup
@@ -46,7 +48,6 @@ colorscheme solarized
 
 " These lines setup the environment to show graphics and colors correctly.
 set rtp+=~/.vim/bundle/powerline/powerline/bindings/vim
-set nocompatible
 
 set laststatus=2 " Always display the statusline in all windows
 set guifont=DejaVu\ Sans\ Mono\ for\ Powerline:h14
