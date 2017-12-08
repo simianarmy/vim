@@ -3,7 +3,8 @@ set shell=zsh
 filetype plugin indent on
 
 " set the runtime path to include Vundle and initialize
-set rtp+=~/.vim/bundle/Vundle.vim
+set rtp+=/Users/marcm/.vim/bundle/Vundle.vim
+set rtp+=/usr/local/opt/fzf
 call vundle#begin()
   Plugin 'gmarik/Vundle.vim'
   Plugin 'kien/ctrlp.vim'
@@ -11,15 +12,26 @@ call vundle#begin()
   Plugin 'tpope/vim-surround'
   Plugin 'tpope/vim-unimpaired'
   Plugin 'tpope/vim-repeat'
+  Plugin 'tpope/vim-fugitive'
+  Plugin 'tpope/vim-projectionist'
+  Plugin 'tpope/vim-dispatch.git'
   Plugin 'altercation/vim-colors-solarized'
-  Plugin 'rking/ag.vim'
-  Plugin 'terryma/vim-multiple-cursors'
+  Plugin 'mileszs/ack.vim'
   Plugin 'Valloric/YouCompleteMe'
   Plugin 'scrooloose/nerdcommenter'
   Plugin 'ElmCast/elm-vim'
   Plugin 'burnettk/vim-angular'
   Plugin 'pangloss/vim-javascript'
   Plugin 'leafgarland/typescript-vim'
+  Plugin 'vim-syntastic/syntastic'
+  Plugin 'kchmck/vim-coffee-script'
+  Plugin 'JamshedVesuna/vim-markdown-preview'
+  Plugin 'gagoar/StripWhiteSpaces'
+  Plugin 'editorconfig/editorconfig-vim'
+  Plugin 'junegunn/fzf'
+  Plugin 'junegunn/fzf.vim'
+"Plugin 'w0rp/ale'
+  Plugin 'airblade/vim-gitgutter'
 call vundle#end()            " required
 
 let g:minBufExplForceSyntaxEnable = 1
@@ -80,7 +92,7 @@ set wildmenu                                                 " show a navigable 
 " Show command in bottom right portion of the screen
 set showcmd
 " Show lines numbers
-" set number
+set number
 " Prefer relative line numbering?
 " set relativenumber
 " Indent stuff
@@ -129,11 +141,11 @@ set diffopt=vertical
 set modelines=1
 set laststatus=2 " required for airline
 
-" Want a different map leader than 
+" Want a different map leader than
 let mapleader = ","
 map <leader>l :Align
 nmap <leader>] :TagbarToggle<CR>
-nmap <leader><space> :StripWhitespace<CR>
+nmap <leader><space> :StripWhiteSpaces<CR>
 nmap <leader>g :GitGutterToggle<CR>
 nmap <leader>c <Plug>Kwbd
 map <silent> <leader>V :source ~/.vimrc<CR>:filetype detect<CR>:exe ":echo 'vimrc reloaded'"<CR>
@@ -225,8 +237,8 @@ let g:syntastic_auto_loc_list = 0
 let g:syntastic_check_on_open = 0
 let g:syntastic_check_on_wq = 1
 
-let g:syntastic_javascript_checkers = ['jscs']
-autocmd FileType javascript let b:syntastic_checkers = findfile('.jscsrc', '.;') != '' ? ['jscs'] : ['jshint']
+let g:syntastic_javascript_checkers = ['eslint']
+let g:syntastic_javascript_eslint_exe = '$(npm bin)/eslint'
 
 " Elm bindings
 nnoremap <leader>el :ElmEvalLine<CR>
@@ -244,7 +256,7 @@ set wildignore+=*.gz
 " Compile soy template
 "au BufWrite */templates/*.soy !python mobile/tools/buildproj.py -genTemplate %:p
 " Compile sass
-"au BufWrite */stylesheets/*.scss !sass --update --force /Users/marcmauger/Documents/code/casino/branches/mobile/mobile/src/stylesheets/sass/:/Users/marcmauger/Documents/code/casino/branches/mobile/www/content/mobile/stylesheets 
+"au BufWrite */stylesheets/*.scss !sass --update --force /Users/marcmauger/Documents/code/casino/branches/mobile/mobile/src/stylesheets/sass/:/Users/marcmauger/Documents/code/casino/branches/mobile/www/content/mobile/stylesheets
 set path+=app/src/**
 set path+=app/sdk/libs/dd/**
 set path+=app/sdk/src/**
@@ -255,7 +267,7 @@ set tags+=./app/tags,./build/tags,tags
 "-------------------------
 " Ag
 "-------------------------
-map <Leader>f <ESC>:tabnew<CR>:Ag 
+map <Leader>f <ESC>:tabnew<CR>:Ag
 map <Leader>F <ESC>:Ag
 map <Leader>fs <ESC>:tabnew<CR>:AgFromSearch<CR>
 
@@ -274,14 +286,22 @@ let NERDTreeIgnore = ['\.DS_Store', '\.idea', '\.git']
 map <Leader>d :NERDTreeToggle<CR>
 map <Leader>D :NERDTreeFind<CR>
 
+" Markdown browser hotkey
+let vim_markdown_preview_hotkey='<C-M>'
+
 " TODO
 " These should go in the work machine's .vimrc.local
 
 " Buildproj casino shortcuts
-command! BP :!python app/sdk/tools/buildproj.py --bl
-command! BPP :!python app/sdk/tools/buildproj.py --preflight
 command! JSON :%!python -m json.tool
 command! JSCS :%!jscs -x %
+
+"--
+"" fzf
+nnoremap <C-p> :<C-u>FZF<CR>
+nmap ; :Buffers<CR>
+nmap <Leader>t :Files<CR>
+nmap <Leader>r :Tags<CR>
 
 " Go crazy!
 if filereadable(expand("~/.vimrc.local"))
@@ -297,4 +317,6 @@ if filereadable(expand("~/.vimrc.local"))
   source ~/.vimrc.local
 endif
 
+set exrc
+set secure
 
