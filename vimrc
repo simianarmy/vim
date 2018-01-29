@@ -24,15 +24,17 @@ call vundle#begin()
   Plugin 'burnettk/vim-angular'
   Plugin 'pangloss/vim-javascript'
   Plugin 'leafgarland/typescript-vim'
+  " Choose Syntastic vs ALE for linting
   Plugin 'vim-syntastic/syntastic'
+  " Plugin 'w0rp/ale'
   Plugin 'kchmck/vim-coffee-script'
   Plugin 'JamshedVesuna/vim-markdown-preview'
   Plugin 'gagoar/StripWhiteSpaces'
   Plugin 'editorconfig/editorconfig-vim'
   Plugin 'junegunn/fzf'
   Plugin 'junegunn/fzf.vim'
-"Plugin 'w0rp/ale'
   Plugin 'airblade/vim-gitgutter'
+  Plugin 'janko-m/vim-test'
 call vundle#end()            " required
 filetype plugin indent on
 
@@ -290,10 +292,18 @@ map <Leader>D :NERDTreeFind<CR>
 " Markdown browser hotkey
 let vim_markdown_preview_hotkey='<C-M>'
 
+"---------------------------
+""" Ale
+let g:ale_linters = {
+            \ 'javascript': ['eslint'],
+            \}
+nmap <silent> [W <Plug>(ale_first)
+nmap <silent> [w <Plug>(ale_previous)
+nmap <silent> ]w <Plug>(ale_next)
+nmap <silent> ]W <Plug>(ale_last)
+
 " TODO
 " These should go in the work machine's .vimrc.local
-
-" Buildproj casino shortcuts
 command! JSON :%!python -m json.tool
 command! JSCS :%!jscs -x %
 
