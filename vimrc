@@ -8,7 +8,7 @@ set rtp+=/Users/marcm/.vim/bundle/Vundle.vim
 set rtp+=/usr/local/opt/fzf
 call vundle#begin()
   Plugin 'gmarik/Vundle.vim'
-  Plugin 'kien/ctrlp.vim'
+  Plugin 'ctrlpvim/ctrlp.vim'
   Plugin 'scrooloose/nerdtree'
   Plugin 'tpope/vim-surround'
   Plugin 'tpope/vim-unimpaired'
@@ -24,9 +24,12 @@ call vundle#begin()
   Plugin 'burnettk/vim-angular'
   Plugin 'pangloss/vim-javascript'
   Plugin 'leafgarland/typescript-vim'
+  Plugin 'mxw/vim-jsx'
+  Plugin 'mattn/emmet-vim'
   " Choose Syntastic vs ALE for linting
-  Plugin 'vim-syntastic/syntastic'
   " Plugin 'w0rp/ale'
+  Plugin 'vim-syntastic/syntastic'
+  Plugin 'prettier/vim-prettier'
   Plugin 'kchmck/vim-coffee-script'
   Plugin 'JamshedVesuna/vim-markdown-preview'
   Plugin 'gagoar/StripWhiteSpaces'
@@ -39,9 +42,9 @@ call vundle#end()            " required
 filetype plugin indent on
 
 let g:minBufExplForceSyntaxEnable = 1
-python from powerline.vim import setup as powerline_setup
-python powerline_setup()
-python del powerline_setup
+" python from powerline.vim import setup as powerline_setup
+" python powerline_setup()
+" python del powerline_setup
 
 if ! has('gui_running')
    set ttimeoutlen=10
@@ -86,9 +89,9 @@ set hidden
 " Set font type and size. Depends on the resolution. Larger screens, prefer h20
 set guifont=Menlo:h13
 " Tab stuff
-set tabstop=4
-set shiftwidth=4
-set softtabstop=4
+set tabstop=2
+set shiftwidth=2
+set softtabstop=2
 set expandtab
 set wildignore=log/**,node_modules/**,target/**,tmp/**,*.rbc,*.so,*.swp,*.zip
 set wildmenu                                                 " show a navigable menu for tab completion
@@ -255,16 +258,6 @@ let g:ctrlp_match_window = 'bottom,order:btt,min:1,max:10,results:30'
 set wildignore+=*/generated/*
 set wildignore+=*.gz
 
-
-" Compile soy template
-"au BufWrite */templates/*.soy !python mobile/tools/buildproj.py -genTemplate %:p
-" Compile sass
-"au BufWrite */stylesheets/*.scss !sass --update --force /Users/marcmauger/Documents/code/casino/branches/mobile/mobile/src/stylesheets/sass/:/Users/marcmauger/Documents/code/casino/branches/mobile/www/content/mobile/stylesheets
-set path+=app/src/**
-set path+=app/sdk/libs/dd/**
-set path+=app/sdk/src/**
-set path+=app/demos/**
-set path+=build/www/application/**
 set tags+=./app/tags,./build/tags,tags
 
 "-------------------------
@@ -292,15 +285,48 @@ map <Leader>D :NERDTreeFind<CR>
 " Markdown browser hotkey
 let vim_markdown_preview_hotkey='<C-M>'
 
+" Prettier: Run before saving async
+let g:prettier#autoformat = 0
+" autocmd BufWritePre *.js,*.jsx,*.mjs,*.ts,*.tsx,*.css,*.less,*.scss,*.json,*.graphql,*.md,*.vue PrettierAsync
+
+" Prettier default: false
+let g:prettier#config#single_quote = 'false'
+
+" Prettier default: true
+let g:prettier#config#bracket_spacing = 'true'
+
+" Prettier default: false
+let g:prettier#config#jsx_bracket_same_line = 'false'
+
+" Prettier default: avoid
+let g:prettier#config#arrow_parens = 'avoid'
+
+" Prettier default: none
+let g:prettier#config#trailing_comma = 'false'
+
+" Prettier default: babylon
+let g:prettier#config#parser = 'babylon'
+
+" Emmet
+let g:user_emmet_settings = {
+  \  'javascript.jsx' : {
+    \      'extends' : 'jsx',
+    \  },
+  \}
+
 "---------------------------
 """ Ale
-let g:ale_linters = {
-            \ 'javascript': ['eslint'],
-            \}
-nmap <silent> [W <Plug>(ale_first)
-nmap <silent> [w <Plug>(ale_previous)
-nmap <silent> ]w <Plug>(ale_next)
-nmap <silent> ]W <Plug>(ale_last)
+"let g:ale_linters = {
+"            \ 'javascript': [],
+"            \}
+"let g:ale_fixers = {
+"            \ 'javascript': ['prettier'],
+"            \}
+"let g:ale_fix_on_save = 1
+"nmap <silent> [W <Plug>(ale_first)
+"nmap <silent> [w <Plug>(ale_previous)
+"nmap <silent> ]w <Plug>(ale_next)
+"nmap <silent> ]W <Plug>(ale_last)
 
 " TODO
 " These should go in the work machine's .vimrc.local
