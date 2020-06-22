@@ -4,10 +4,13 @@ set nocompatible
 filetype off
 
 " set the runtime path to include Vundle and initialize
-set rtp+=/Users/marcm/.vim/bundle/Vundle.vim
+set rtp+=/Users/marc.mauger/.vim/bundle/Vundle.vim
 set rtp+=/usr/local/opt/fzf
 call vundle#begin()
   Plugin 'gmarik/Vundle.vim'
+  " color scheme
+  " Plugin 'altercation/vim-colors-solarized'
+  Plugin 'morhetz/gruvbox'
   Plugin 'ctrlpvim/ctrlp.vim'
   Plugin 'scrooloose/nerdtree'
   Plugin 'tpope/vim-surround'
@@ -16,7 +19,6 @@ call vundle#begin()
   Plugin 'tpope/vim-fugitive'
   Plugin 'tpope/vim-projectionist'
   Plugin 'tpope/vim-dispatch.git'
-  Plugin 'altercation/vim-colors-solarized'
   Plugin 'mileszs/ack.vim'
   Plugin 'Valloric/YouCompleteMe'
   Plugin 'scrooloose/nerdcommenter'
@@ -61,13 +63,16 @@ endif
 let g:solarized_termcolors = 16
 syntax enable
 set background=dark
-colorscheme solarized
+set termguicolors
+" colorscheme solarized
+colorscheme gruvbox
 
 " These lines setup the environment to show graphics and colors correctly.
 set rtp+=~/.vim/bundle/powerline/powerline/bindings/vim
 
 set laststatus=2 " Always display the statusline in all windows
-set guifont=DejaVu\ Sans\ Mono\ for\ Powerline:h14
+" set guifont=DejaVu\ Sans\ Mono\ for\ Powerline:h14
+set guifont=Fira\ Code:h12
 set noshowmode " Hide the default mode text (e.g. -- INSERT -- below the statusline)
 
 " Write the old file out when switching between files.
@@ -110,7 +115,7 @@ set laststatus=2
 " set linespace=3
 " Better line wrapping
 set wrap
-set textwidth=79
+" set textwidth=79
 set formatoptions=qrn1
 " Set incremental searching
 set incsearch
@@ -253,8 +258,14 @@ nnoremap <leader>em :ElmMakeCurrentFile<CR>
 " au BufWritePost *.elm ElmMakeFile("Main.elm")
 
 " For ctrlp.vim
-let g:ctrlp_custom_ignore = '\v[\/]\.(git|hg|svn)$'
+" let g:ctrlp_custom_ignore = 'node_modules|\v[\/]\.(git|hg|svn)$'
+let g:ctrlp_custom_ignore = {
+  \ 'dir':  '\v[\/]\.(git|hg|svn)$',
+  \ 'file': '\v\.(exe|so|dll)$',
+  \ 'link': 'SOME_BAD_SYMBOLIC_LINKS',
+  \ }
 let g:ctrlp_match_window = 'bottom,order:btt,min:1,max:10,results:30'
+set wildignore+=*/node_modules/*,*/tmp/*,*.so,*.swp,*.zip     " Linux/MacOSX
 set wildignore+=*/generated/*
 set wildignore+=*.gz
 
@@ -286,8 +297,8 @@ map <Leader>D :NERDTreeFind<CR>
 let vim_markdown_preview_hotkey='<C-M>'
 
 " Prettier: Run before saving async
-let g:prettier#autoformat = 0
-" autocmd BufWritePre *.js,*.jsx,*.mjs,*.ts,*.tsx,*.css,*.less,*.scss,*.json,*.graphql,*.md,*.vue PrettierAsync
+let g:prettier#autoformat = 1
+autocmd BufWritePre *.js,*.jsx,*.mjs,*.ts,*.tsx,*.css,*.less,*.scss,*.json,*.graphql,*.md,*.vue PrettierAsync
 
 " Prettier default: false
 let g:prettier#config#single_quote = 'false'
@@ -298,11 +309,8 @@ let g:prettier#config#bracket_spacing = 'true'
 " Prettier default: false
 let g:prettier#config#jsx_bracket_same_line = 'false'
 
-" Prettier default: avoid
-let g:prettier#config#arrow_parens = 'avoid'
-
 " Prettier default: none
-let g:prettier#config#trailing_comma = 'false'
+let g:prettier#config#trailing_comma = 'none'
 
 " Prettier default: babylon
 let g:prettier#config#parser = 'babylon'
@@ -339,6 +347,9 @@ nnoremap <C-p> :<C-u>FZF<CR>
 nmap ; :Buffers<CR>
 nmap <Leader>t :Files<CR>
 nmap <Leader>r :Tags<CR>
+
+" surround work with quotes
+nnoremap <Leader>q" ysiw"<CR>
 
 " Go crazy!
 if filereadable(expand("~/.vimrc.local"))
