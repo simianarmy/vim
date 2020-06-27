@@ -116,32 +116,32 @@ call vundle#begin()
   Plugin 'junegunn/fzf'
   Plugin 'junegunn/fzf.vim'
   " fzf is more modern than ctrlp
-  Plugin 'neoclide/coc.nvim'
+  Plugin 'neoclide/coc.nvim', { 'branch': 'release' }
+  Plugin 'sheerun/vim-polyglot'
   Plugin 'scrooloose/nerdtree'
   Plugin 'tpope/vim-surround'
   Plugin 'tpope/vim-unimpaired'
   Plugin 'tpope/vim-repeat'
   Plugin 'tpope/vim-fugitive'
-  Plugin 'tpope/vim-projectionist'
-  Plugin 'tpope/vim-dispatch.git'
-  Plugin 'mileszs/ack.vim'
   Plugin 'scrooloose/nerdcommenter'
   Plugin 'ElmCast/elm-vim'
-  Plugin 'burnettk/vim-angular'
+  "Plugin 'burnettk/vim-angular'
   Plugin 'pangloss/vim-javascript'
-  Plugin 'leafgarland/typescript-vim'
-  Plugin 'mxw/vim-jsx'
-  Plugin 'mattn/emmet-vim'
+  "Plugin 'leafgarland/typescript-vim'
+  "Plugin 'mxw/vim-jsx'
+  "Plugin 'mattn/emmet-vim'
   " Choose Syntastic vs ALE for linting
   " Plugin 'w0rp/ale'
-  Plugin 'vim-syntastic/syntastic'
+  "Plugin 'vim-syntastic/syntastic'
   Plugin 'prettier/vim-prettier'
-  Plugin 'kchmck/vim-coffee-script'
+  "Plugin 'kchmck/vim-coffee-script'
   Plugin 'JamshedVesuna/vim-markdown-preview'
   Plugin 'gagoar/StripWhiteSpaces'
   Plugin 'editorconfig/editorconfig-vim'
-  Plugin 'airblade/vim-gitgutter'
-  Plugin 'janko-m/vim-test'
+  Plugin 'mbbill/undotree'
+  Plugin 'vim-airline/vim-airline'
+  "Plugin 'airblade/vim-gitgutter'
+  "Plugin 'janko-m/vim-test'
 call vundle#end()            " required
 filetype plugin indent on
 
@@ -160,9 +160,9 @@ if executable('rg')
 endif
 
 let g:minBufExplForceSyntaxEnable = 1
-" python from powerline.vim import setup as powerline_setup
-" python powerline_setup()
-" python del powerline_setup
+let g:airline_powerline_fonts = 1
+let g:airline#extensions#tabline#enabled = 1
+let g:airline#extensions#tabline#buffer_nr_show = 1
 
 if ! has('gui_running')
    set ttimeoutlen=10
@@ -176,20 +176,13 @@ endif
 " Want a different map leader than
 let mapleader = ","
 map <leader>l :Align
-nmap <leader>] :TagbarToggle<CR>
 nmap <leader><space> :StripWhiteSpaces<CR>
-nmap <leader>g :GitGutterToggle<CR>
-nmap <leader>c <Plug>Kwbd
 map <silent> <leader>V :source ~/.vimrc<CR>:filetype detect<CR>:exe ":echo 'vimrc reloaded'"<CR>
-" Faster shortcut for commenting. Requires T-Comment plugin
-" map <leader>c <c-_><c-_>
 " Opens a vertical split and switches over (\v)
 nnoremap <leader>v <C-w>v<C-w>l
 " Set up an HTML5 template for all new .html files
 autocmd BufNewFile * silent! 0r $VIMHOME/templates/%:e.tpl
 autocmd BufRead,BufNewFile *.md set filetype=markdown
-" use xml syntax highlighting for .soy
-autocmd BufNewFile,BufRead *.soy set filetype=xml
 " automatically rebalance windows on vim resize
 autocmd VimResized * :wincmd =
 " Saves time; maps the spacebar to colon
@@ -204,11 +197,7 @@ imap jj <esc>
 nmap <silent> ,da :exec "1," . bufnr('$') . "bd"<cr>
 " Bubble single lines (kicks butt)
 " http://vimcasts.org/episodes/bubbling-text/
-nmap <C-Up> ddkP
-nmap <C-Down> ddp
-" Bubble multiple lines
-vmap <C-Up> xkP`[V`]
-vmap <C-Down> xp`[V`]
+
 " Source the vimrc file after saving it. This way, you don't have to reload
 " Vim to see the changes.
 if has("autocmd")
@@ -260,17 +249,7 @@ nmap <leader>bv :bel vsp
 inoremap <expr><TAB>  pumvisible() ? "\<C-n>" : "\<TAB>"
 inoremap <expr><S-TAB>  pumvisible() ? "\<C-p>" : "\<S-TAB>"
 
-" lint js
-" autocmd bufwritepost *.js !jshint <afile>
-
-" syntastic settings
-let g:syntastic_always_populate_loc_list = 1
-let g:syntastic_auto_loc_list = 0
-let g:syntastic_check_on_open = 0
-let g:syntastic_check_on_wq = 1
-
-let g:syntastic_javascript_checkers = ['eslint']
-let g:syntastic_javascript_eslint_exe = '$(npm bin)/eslint'
+nnoremap <leader>u :UndotreeShow<CR>
 
 " Elm bindings
 nnoremap <leader>el :ElmEvalLine<CR>
@@ -281,13 +260,6 @@ nnoremap <leader>em :ElmMakeCurrentFile<CR>
 set wildignore+=*/node_modules/*,*/tmp/*,*.so,*.swp,*.zip     " Linux/MacOSX
 set wildignore+=*/generated/*
 set wildignore+=*.gz
-
-"-------------------------
-" Ag
-"-------------------------
-map <Leader>f <ESC>:tabnew<CR>:Ag
-map <Leader>F <ESC>:Ag
-map <Leader>fs <ESC>:tabnew<CR>:AgFromSearch<CR>
 
 "-------------------------
 "" NERDTree
@@ -306,19 +278,14 @@ autocmd BufWritePre *.js,*.jsx,*.mjs,*.ts,*.tsx,*.css,*.less,*.scss,*.json,*.gra
 
 " Prettier default: false
 let g:prettier#config#single_quote = 'false'
-
 " Prettier default: true
 let g:prettier#config#bracket_spacing = 'true'
-
 " Prettier default: false
 let g:prettier#config#jsx_bracket_same_line = 'false'
-
 " Prettier default: none
 let g:prettier#config#trailing_comma = 'none'
-
 " Prettier default: babylon
 let g:prettier#config#parser = 'babylon'
-
 " Emmet
 let g:user_emmet_settings = {
   \  'javascript.jsx' : {
@@ -326,25 +293,36 @@ let g:user_emmet_settings = {
     \  },
   \}
 
-
-" TODO
-" These should go in the work machine's .vimrc.local
-command! JSON :%!python -m json.tool
-command! JSCS :%!jscs -x %
-
-"--
 "" fzf
 nmap ; :Buffers<CR>
 nnoremap <C-p> :GFiles<CR>
 nmap <Leader>t :GFiles<CR>
 nmap <Leader>r :Tags<CR>
+nnoremap <Leader>ps :Rg<SPACE>
+nnoremap <Leader>pf :Files<CR>
 
 command! -bang -nargs=* Find call fzf#vim#grep('rg --column --line-number --no-heading --fixed-strings --ignore-case --no-ignore --hidden --follow --glob "!.git/*" --color "always" '.shellescape(<q-args>), 1, <bang>0)
 
 " surround work with quotes
 nnoremap <Leader>q" ysiw"<CR>
 
-" coc
+" Sweet Sweet FuGITive
+nmap <leader>gh :diffget //3<CR>
+nmap <leader>gu :diffget //2<CR>
+nmap <leader>gs :G<CR>
+
+" CoC configs
+let g:coc_global_extensions = [
+  \ 'coc-tsserver'
+  \ ]
+if isdirectory('./node_modules') && isdirectory('./node_modules/prettier')
+  let g:coc_global_extensions += ['coc-prettier']
+endif
+
+if isdirectory('./node_modules') && isdirectory('./node_modules/eslint')
+  let g:coc_global_extensions += ['coc-eslint']
+endif
+
 nmap <leader>gd <Plug>(coc-definition)
 nmap <leader>gy <Plug>(coc-type-definition)
 nmap <leader>gi <Plug>(coc-implementation)
@@ -356,26 +334,40 @@ nmap <silent> <leader>gp <Plug>(coc-diagnostic-prev-error)
 nmap <silent> <leader>gn <Plug>(coc-diagnostic-next-error)
 nnoremap <leader>cr :CocRestart
 
-" Sweet Sweet FuGITive
-nmap <leader>gh :diffget //3<CR>
-nmap <leader>gu :diffget //2<CR>
-nmap <leader>gs :G<CR>
+" Use tab for trigger completion with characters ahead and navigate.
+" NOTE: Use command ':verbose imap <tab>' to make sure tab is not mapped by
+" other plugin before putting this into your config.
+inoremap <silent><expr> <TAB>
+            \ pumvisible() ? "\<C-n>" :
+            \ <SID>check_back_space() ? "\<TAB>" :
+            \ coc#refresh()
+
+function! s:check_back_space() abort
+  let col = col('.') - 1
+  return !col || getline('.')[col - 1]  =~# '\s'
+endfunction
 
 
-" Go crazy!
-if filereadable(expand("~/.vimrc.local"))
-  " In your .vimrc.local, you might like:
-  "
-  " set autowrite
-  " set nocursorline
-  " set nowritebackup
-  " set whichwrap+=<,>,h,l,[,] " Wrap arrow keys between lines
-  "
-  " autocmd! bufwritepost .vimrc source ~/.vimrc
-  " noremap! jj <ESC>
-  source ~/.vimrc.local
-endif
+command! -nargs=0 Prettier :CocCommand prettier.formatFile
+inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
+" Use <c-space> to trigger completion.
+inoremap <silent><expr> <C-space> coc#refresh()
 
-set exrc
-set secure
+" Highlight the symbol and its references when holding the cursor.
+autocmd CursorHold * silent call CocActionAsync('highlight')
+
+" code actions on word under cursor
+nmap <leader>do <Plug>(coc-codeaction)
+
+" Symbol renaming.
+nmap <leader>rn <Plug>(coc-rename)
+
+" Formatting selected code.
+xmap <leader>f  <Plug>(coc-format-selected)
+
+" TODO
+" These should go in the work machine's .vimrc.local
+command! JSON :%!python -m json.tool
+command! JSCS :%!jscs -x %
+
 
