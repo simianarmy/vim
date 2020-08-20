@@ -56,7 +56,7 @@ set showcmd
 " Show lines numbers
 set number
 " Prefer relative line numbering?
-" set relativenumber
+set relativenumber
 " Indent stuff
 set smartindent
 set autoindent
@@ -96,7 +96,9 @@ set completeopt=longest,menuone
 set diffopt=vertical
 " Terminal only
 set modelines=1
-
+" Don't pass messages to |ins-completion-menu|.
+set shortmess+=c
+set path=.,packages/shared/src
 
 " set up pathogen, https://github.com/tpope/vim-pathogen
 set shell=zsh
@@ -119,6 +121,8 @@ call vundle#begin()
   Plugin 'neoclide/coc.nvim', { 'branch': 'release' }
   Plugin 'sheerun/vim-polyglot'
   Plugin 'scrooloose/nerdtree'
+  Plugin 'kevinhwang91/rnvimr', {'do': 'make sync'}
+  Plugin 'rbgrouleff/bclose.vim'
   Plugin 'tpope/vim-surround'
   Plugin 'tpope/vim-unimpaired'
   Plugin 'tpope/vim-repeat'
@@ -127,6 +131,7 @@ call vundle#begin()
   Plugin 'ElmCast/elm-vim'
   "Plugin 'burnettk/vim-angular'
   Plugin 'pangloss/vim-javascript'
+  Plugin 'derekwyatt/vim-scala'
   "Plugin 'leafgarland/typescript-vim'
   "Plugin 'mxw/vim-jsx'
   "Plugin 'mattn/emmet-vim'
@@ -214,8 +219,14 @@ nmap <C-l> <C-w>l
 " "------------------------"
 " "NERDTREE PLUGIN SETTINGS
 " "------------------------"
+let NERDTreeShowHidden=1
+let NERDTreeIgnore = ['\.DS_Store', '\.idea', '\.git']
 nmap <leader>d :NERDTreeToggle<CR>
 nmap <leader>f :NERDTreeFind<CR>
+
+" Ranger settings
+let g:NERDTreeHijackNetrw = 1
+let g:ranger_replace_netrw = 1 "open ranger when vim open a directory
 
 " invert line numbers display
 nmap <leader>n :set invnumber<CR>
@@ -261,20 +272,8 @@ set wildignore+=*/node_modules/*,*/tmp/*,*.so,*.swp,*.zip     " Linux/MacOSX
 set wildignore+=*/generated/*
 set wildignore+=*.gz
 
-"-------------------------
-"" NERDTree
-"-------------------------
-let NERDTreeIgnore = ['\.DS_Store', '\.idea', '\.git']
-"let NERDTreeQuitOnOpen = 1
-map <Leader>d :NERDTreeToggle<CR>
-map <Leader>D :NERDTreeFind<CR>
-
 " Markdown browser hotkey
 let vim_markdown_preview_hotkey='<C-M>'
-
-" Prettier: Run before saving async
-let g:prettier#autoformat = 1
-autocmd BufWritePre *.js,*.jsx,*.mjs,*.ts,*.tsx,*.css,*.less,*.scss,*.json,*.graphql,*.md,*.vue PrettierAsync
 
 " Prettier default: false
 let g:prettier#config#single_quote = 'false'
@@ -294,21 +293,22 @@ let g:user_emmet_settings = {
   \}
 
 "" fzf
-nmap ; :Buffers<CR>
 nnoremap <C-p> :GFiles<CR>
 nmap <Leader>t :GFiles<CR>
+nmap <Leader>b :Buffers<CR>
 nmap <Leader>r :Tags<CR>
 nnoremap <Leader>ps :Rg<SPACE>
 nnoremap <Leader>pf :Files<CR>
 
 command! -bang -nargs=* Find call fzf#vim#grep('rg --column --line-number --no-heading --fixed-strings --ignore-case --no-ignore --hidden --follow --glob "!.git/*" --color "always" '.shellescape(<q-args>), 1, <bang>0)
+nnoremap <leader>j :call fzf#vim#tags("'".expand('<cword>'))<cr>
 
 " surround work with quotes
 nnoremap <Leader>q" ysiw"<CR>
 
 " Sweet Sweet FuGITive
-nmap <leader>gh :diffget //3<CR>
-nmap <leader>gu :diffget //2<CR>
+nmap <leader>gl :diffget //3<CR>
+nmap <leader>ga :diffget //2<CR>
 nmap <leader>gs :G<CR>
 
 " CoC configs
@@ -334,6 +334,8 @@ nmap <silent> <leader>gp <Plug>(coc-diagnostic-prev-error)
 nmap <silent> <leader>gn <Plug>(coc-diagnostic-next-error)
 nnoremap <leader>cr :CocRestart
 
+au BufRead,BufNewFile *.sbt,*.sc set filetype=scala
+
 " Use tab for trigger completion with characters ahead and navigate.
 " NOTE: Use command ':verbose imap <tab>' to make sure tab is not mapped by
 " other plugin before putting this into your config.
@@ -349,6 +351,7 @@ endfunction
 
 
 command! -nargs=0 Prettier :CocCommand prettier.formatFile
+
 inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
 " Use <c-space> to trigger completion.
 inoremap <silent><expr> <C-space> coc#refresh()
