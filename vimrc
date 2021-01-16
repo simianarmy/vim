@@ -108,15 +108,15 @@ set nocompatible
 filetype off
 
 call plug#begin('~/.vim/plugged')
-" set the runtime path to include Vundle and initialize
-"set rtp+=/Users/marc.mauger/.vim/bundle/Vundle.vim
-"set rtp+=/usr/local/opt/fzf
-"call vundle#begin()
-  Plug 'gmarik/Vundle.vim'
   " color scheme
   Plug 'gruvbox-community/gruvbox'
   Plug 'sainnhe/gruvbox-material'
   Plug 'flazz/vim-colorschemes'
+  " Enable after Neovim 0.5
+  "Plug 'nvim-lua/popup.nvim'
+  "Plug 'nvim-lua/plenary.nvim'
+  "Plug 'nvim-telescope/telescope.nvim'
+
   " fuzzy search
   Plug 'junegunn/fzf'
   Plug 'junegunn/fzf.vim'
@@ -132,31 +132,29 @@ call plug#begin('~/.vim/plugged')
   Plug 'tpope/vim-fugitive'
   Plug 'scrooloose/nerdcommenter'
   Plug 'ElmCast/elm-vim'
-  "Plug 'burnettk/vim-angular'
   Plug 'pangloss/vim-javascript'
   Plug 'derekwyatt/vim-scala'
-  "Plug 'leafgarland/typescript-vim'
-  "Plug 'mxw/vim-jsx'
-  "Plug 'mattn/emmet-vim'
-  " Choose Syntastic vs ALE for linting
-  " Plug 'w0rp/ale'
-  "Plug 'vim-syntastic/syntastic'
   Plug 'prettier/vim-prettier'
-  "Plug 'kchmck/vim-coffee-script'
   Plug 'JamshedVesuna/vim-markdown-preview'
   Plug 'gagoar/StripWhiteSpaces'
   Plug 'editorconfig/editorconfig-vim'
   Plug 'mbbill/undotree'
   Plug 'vim-airline/vim-airline'
   Plug 'christoomey/vim-tmux-navigator'
+  "Plug 'leafgarland/typescript-vim'
+  "Plug 'mxw/vim-jsx'
+  "Plug 'mattn/emmet-vim'
+  "Choose Syntastic vs ALE for linting
+  "Plug 'vim-syntastic/syntastic'
+  "Plug 'burnettk/vim-angular'
   "Plug 'airblade/vim-gitgutter'
   "Plug 'janko-m/vim-test'
 call plug#end()
-"call vundle#end()            " required
 
 filetype plugin indent on
 
 set background=dark
+highlight Normal guibg=none
 colorscheme gruvbox
 
 let g:gruvbox_contrast_dark = 'hard'
@@ -175,15 +173,6 @@ let g:airline_powerline_fonts = 1
 let g:airline#extensions#tabline#enabled = 1
 let g:airline#extensions#tabline#buffer_nr_show = 1
 
-if ! has('gui_running')
-   set ttimeoutlen=10
-   augroup FastEscape
-      autocmd!
-      au InsertEnter * set timeoutlen=0
-      au InsertLeave * set timeoutlen=1000
-   augroup END
-endif
-
 " Want a different map leader than
 let mapleader = ","
 map <leader>l :Align
@@ -191,11 +180,6 @@ nmap <leader><space> :StripWhiteSpaces<CR>
 map <silent> <leader>V :source ~/.vimrc<CR>:filetype detect<CR>:exe ":echo 'vimrc reloaded'"<CR>
 " Opens a vertical split and switches over (\v)
 nnoremap <leader>v <C-w>v<C-w>l
-" Set up an HTML5 template for all new .html files
-autocmd BufNewFile * silent! 0r $VIMHOME/templates/%:e.tpl
-autocmd BufRead,BufNewFile *.md set filetype=markdown
-" automatically rebalance windows on vim resize
-autocmd VimResized * :wincmd =
 " Saves time; maps the spacebar to colon
 nmap <space> :
 " Automatically change current directory to that of the file in the buffer
@@ -209,14 +193,6 @@ nmap <silent> ,da :exec "1," . bufnr('$') . "bd"<cr>
 " Bubble single lines (kicks butt)
 " http://vimcasts.org/episodes/bubbling-text/
 
-" Source the vimrc file after saving it. This way, you don't have to reload
-" Vim to see the changes.
-if has("autocmd")
- augroup myvimrchooks
-  au!
-  autocmd bufwritepost .vimrc source ~/.vimrc
- augroup END
-endif
 " easier window navigation
 nmap <C-h> <C-w>h
 nmap <C-j> <C-w>j
@@ -336,8 +312,6 @@ nmap <silent> <leader>gp <Plug>(coc-diagnostic-prev-error)
 nmap <silent> <leader>gn <Plug>(coc-diagnostic-next-error)
 nnoremap <leader>cr :CocRestart
 
-au BufRead,BufNewFile *.sbt,*.sc set filetype=scala
-
 " Use tab for trigger completion with characters ahead and navigate.
 " NOTE: Use command ':verbose imap <tab>' to make sure tab is not mapped by
 " other plugin before putting this into your config.
@@ -351,15 +325,11 @@ function! s:check_back_space() abort
   return !col || getline('.')[col - 1]  =~# '\s'
 endfunction
 
-
 command! -nargs=0 Prettier :CocCommand prettier.formatFile
 
 inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
 " Use <c-space> to trigger completion.
 inoremap <silent><expr> <C-space> coc#refresh()
-
-" Highlight the symbol and its references when holding the cursor.
-autocmd CursorHold * silent call CocActionAsync('highlight')
 
 " code actions on word under cursor
 nmap <leader>do <Plug>(coc-codeaction)
@@ -373,9 +343,38 @@ xmap <leader>f  <Plug>(coc-format-selected)
 " search word under cursor
 nnoremap <leader>k :exe 'Ag!' expand('<cword>')<cr>
 
-" TODO
 " These should go in the work machine's .vimrc.local
 command! JSON :%!python -m json.tool
 command! JSCS :%!jscs -x %
 
+" AutoCommands
+
+if ! has('gui_running')
+   set ttimeoutlen=10
+   augroup FastEscape
+      autocmd!
+      au InsertEnter * set timeoutlen=0
+      au InsertLeave * set timeoutlen=1000
+   augroup END
+endif
+
+" Set up an HTML5 template for all new .html files
+autocmd BufNewFile * silent! 0r $VIMHOME/templates/%:e.tpl
+autocmd BufRead,BufNewFile *.md set filetype=markdown
+" automatically rebalance windows on vim resize
+autocmd VimResized * :wincmd =
+
+" Source the vimrc file after saving it. This way, you don't have to reload
+" Vim to see the changes.
+if has("autocmd")
+ augroup myvimrchooks
+  au!
+  autocmd bufwritepost .vimrc source ~/.vimrc
+ augroup END
+endif
+
+au BufRead,BufNewFile *.sbt,*.sc set filetype=scala
+
+" Highlight the symbol and its references when holding the cursor.
+autocmd CursorHold * silent call CocActionAsync('highlight')
 
