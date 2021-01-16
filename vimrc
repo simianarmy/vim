@@ -1,5 +1,6 @@
 syntax on
 
+set exrc
 set guicursor=
 set noshowmatch
 set nohlsearch
@@ -19,6 +20,7 @@ set updatetime=50
 
 " set colorcolumn=80
 " highlight ColorColumn ctermbg=0 guibg=lightgrey
+set signcolumn=yes
 
 set termguicolors
 
@@ -39,7 +41,7 @@ set encoding=utf-8
 set visualbell
 " Display current cursor position in lower right corner.
 set ruler
-set scrolloff=3                                              " show context above/below cursorline
+set scrolloff=8                                              " show context above/below cursorline
 " Ever notice a slight lag after typing the leader key + command? This lowers
 set timeoutlen=500
 " Switch between buffers without saving
@@ -47,9 +49,12 @@ set hidden
 
 " Tab stuff
 set tabstop=2
-set shiftwidth=2
 set softtabstop=2
+set shiftwidth=2
 set expandtab
+" Indent stuff
+set smartindent
+set autoindent
 set wildmenu                                                 " show a navigable menu for tab completion
 " Show command in bottom right portion of the screen
 set showcmd
@@ -57,9 +62,6 @@ set showcmd
 set number
 " Prefer relative line numbering?
 set relativenumber
-" Indent stuff
-set smartindent
-set autoindent
 " Always show the status line
 set laststatus=2
 " Prefer a slightly higher line height
@@ -92,7 +94,7 @@ set sessionoptions=resize,winpos,winsize,buffers,tabpages,folds,curdir,help
 " Auto-completion menu
 set wildmode=longest,list,full
 " http://vim.wikia.com/wiki/Make_Vim_completion_popup_menu_work_just_like_in_an_IDE
-set completeopt=longest,menuone
+set completeopt=menuone,noinsert,noselect
 set diffopt=vertical
 " Terminal only
 set modelines=1
@@ -105,49 +107,53 @@ set shell=zsh
 set nocompatible
 filetype off
 
+call plug#begin('~/.vim/plugged')
 " set the runtime path to include Vundle and initialize
-set rtp+=/Users/marc.mauger/.vim/bundle/Vundle.vim
-set rtp+=/usr/local/opt/fzf
-call vundle#begin()
-  Plugin 'gmarik/Vundle.vim'
+"set rtp+=/Users/marc.mauger/.vim/bundle/Vundle.vim
+"set rtp+=/usr/local/opt/fzf
+"call vundle#begin()
+  Plug 'gmarik/Vundle.vim'
   " color scheme
-  Plugin 'gruvbox-community/gruvbox'
-  Plugin 'sainnhe/gruvbox-material'
-  Plugin 'flazz/vim-colorschemes'
+  Plug 'gruvbox-community/gruvbox'
+  Plug 'sainnhe/gruvbox-material'
+  Plug 'flazz/vim-colorschemes'
   " fuzzy search
-  Plugin 'junegunn/fzf'
-  Plugin 'junegunn/fzf.vim'
+  Plug 'junegunn/fzf'
+  Plug 'junegunn/fzf.vim'
   " fzf is more modern than ctrlp
-  Plugin 'neoclide/coc.nvim', { 'branch': 'release' }
-  Plugin 'sheerun/vim-polyglot'
-  Plugin 'scrooloose/nerdtree'
-  Plugin 'kevinhwang91/rnvimr', {'do': 'make sync'}
-  Plugin 'rbgrouleff/bclose.vim'
-  Plugin 'tpope/vim-surround'
-  Plugin 'tpope/vim-unimpaired'
-  Plugin 'tpope/vim-repeat'
-  Plugin 'tpope/vim-fugitive'
-  Plugin 'scrooloose/nerdcommenter'
-  Plugin 'ElmCast/elm-vim'
-  "Plugin 'burnettk/vim-angular'
-  Plugin 'pangloss/vim-javascript'
-  Plugin 'derekwyatt/vim-scala'
-  "Plugin 'leafgarland/typescript-vim'
-  "Plugin 'mxw/vim-jsx'
-  "Plugin 'mattn/emmet-vim'
+  Plug 'neoclide/coc.nvim', { 'branch': 'release' }
+  Plug 'sheerun/vim-polyglot'
+  Plug 'scrooloose/nerdtree'
+  Plug 'kevinhwang91/rnvimr', {'do': 'make sync'}
+  Plug 'rbgrouleff/bclose.vim'
+  Plug 'tpope/vim-surround'
+  Plug 'tpope/vim-unimpaired'
+  Plug 'tpope/vim-repeat'
+  Plug 'tpope/vim-fugitive'
+  Plug 'scrooloose/nerdcommenter'
+  Plug 'ElmCast/elm-vim'
+  "Plug 'burnettk/vim-angular'
+  Plug 'pangloss/vim-javascript'
+  Plug 'derekwyatt/vim-scala'
+  "Plug 'leafgarland/typescript-vim'
+  "Plug 'mxw/vim-jsx'
+  "Plug 'mattn/emmet-vim'
   " Choose Syntastic vs ALE for linting
-  " Plugin 'w0rp/ale'
-  "Plugin 'vim-syntastic/syntastic'
-  Plugin 'prettier/vim-prettier'
-  "Plugin 'kchmck/vim-coffee-script'
-  Plugin 'JamshedVesuna/vim-markdown-preview'
-  Plugin 'gagoar/StripWhiteSpaces'
-  Plugin 'editorconfig/editorconfig-vim'
-  Plugin 'mbbill/undotree'
-  Plugin 'vim-airline/vim-airline'
-  "Plugin 'airblade/vim-gitgutter'
-  "Plugin 'janko-m/vim-test'
-call vundle#end()            " required
+  " Plug 'w0rp/ale'
+  "Plug 'vim-syntastic/syntastic'
+  Plug 'prettier/vim-prettier'
+  "Plug 'kchmck/vim-coffee-script'
+  Plug 'JamshedVesuna/vim-markdown-preview'
+  Plug 'gagoar/StripWhiteSpaces'
+  Plug 'editorconfig/editorconfig-vim'
+  Plug 'mbbill/undotree'
+  Plug 'vim-airline/vim-airline'
+  Plug 'christoomey/vim-tmux-navigator'
+  "Plug 'airblade/vim-gitgutter'
+  "Plug 'janko-m/vim-test'
+call plug#end()
+"call vundle#end()            " required
+
 filetype plugin indent on
 
 set background=dark
@@ -273,18 +279,14 @@ set wildignore+=*/generated/*
 set wildignore+=*.gz
 
 " Markdown browser hotkey
-let vim_markdown_preview_hotkey='<C-M>'
+let vim_markdown_preview_toggle=1
+let vim_markdown_preview_hotkey='<C-m>'
+let vim_markdown_preview_browser='Google Chrome'
+" Requires network connecion, use perl when offline
+let vim_markdown_preview_github=1
+"let vim_markdown_preview_perl=1
+let vim_markdown_preview_temp_file=1
 
-" Prettier default: false
-let g:prettier#config#single_quote = 'false'
-" Prettier default: true
-let g:prettier#config#bracket_spacing = 'true'
-" Prettier default: false
-let g:prettier#config#jsx_bracket_same_line = 'false'
-" Prettier default: none
-let g:prettier#config#trailing_comma = 'none'
-" Prettier default: babylon
-let g:prettier#config#parser = 'babylon'
 " Emmet
 let g:user_emmet_settings = {
   \  'javascript.jsx' : {
@@ -303,7 +305,7 @@ nnoremap <Leader>pf :Files<CR>
 command! -bang -nargs=* Find call fzf#vim#grep('rg --column --line-number --no-heading --fixed-strings --ignore-case --no-ignore --hidden --follow --glob "!.git/*" --color "always" '.shellescape(<q-args>), 1, <bang>0)
 nnoremap <leader>j :call fzf#vim#tags("'".expand('<cword>'))<cr>
 
-" surround work with quotes
+" surround word with quotes
 nnoremap <Leader>q" ysiw"<CR>
 
 " Sweet Sweet FuGITive
@@ -367,6 +369,9 @@ nmap <leader>rn <Plug>(coc-rename)
 
 " Formatting selected code.
 xmap <leader>f  <Plug>(coc-format-selected)
+
+" search word under cursor
+nnoremap <leader>k :exe 'Ag!' expand('<cword>')<cr>
 
 " TODO
 " These should go in the work machine's .vimrc.local
