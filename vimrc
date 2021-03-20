@@ -1,73 +1,34 @@
-" set up pathogen, https://github.com/tpope/vim-pathogen
-set shell=zsh
-set nocompatible
-filetype off
+syntax on
 
-" set the runtime path to include Vundle and initialize
-set rtp+=/Users/marcmauger/.vim/bundle/Vundle.vim
-set rtp+=/usr/local/opt/fzf
-call vundle#begin()
-  Plugin 'gmarik/Vundle.vim'
-  Plugin 'ctrlpvim/ctrlp.vim'
-  Plugin 'scrooloose/nerdtree'
-  Plugin 'tpope/vim-surround'
-  Plugin 'tpope/vim-unimpaired'
-  Plugin 'tpope/vim-repeat'
-  Plugin 'tpope/vim-fugitive'
-  Plugin 'tpope/vim-projectionist'
-  Plugin 'tpope/vim-dispatch.git'
-  Plugin 'mileszs/ack.vim'
- "  Plugin 'Valloric/YouCompleteMe'
-  Plugin 'scrooloose/nerdcommenter'
-  Plugin 'ElmCast/elm-vim'
-  Plugin 'burnettk/vim-angular'
-  Plugin 'pangloss/vim-javascript'
-  Plugin 'leafgarland/typescript-vim'
-  Plugin 'mxw/vim-jsx'
-  Plugin 'mattn/emmet-vim'
-  " Choose Syntastic vs ALE for linting
-  " Plugin 'w0rp/ale'
-  Plugin 'vim-syntastic/syntastic'
-  Plugin 'prettier/vim-prettier'
-  Plugin 'kchmck/vim-coffee-script'
-  Plugin 'JamshedVesuna/vim-markdown-preview'
-  Plugin 'gagoar/StripWhiteSpaces'
-  Plugin 'editorconfig/editorconfig-vim'
-  Plugin 'junegunn/fzf'
-  Plugin 'junegunn/fzf.vim'
-  Plugin 'airblade/vim-gitgutter'
-  Plugin 'janko-m/vim-test'
-  Plugin 'rafi/awesome-vim-colorschemes'
-call vundle#end()            " required
-filetype plugin indent on
+set exrc
+set guicursor=
+set noshowmatch
+set nohlsearch
+set noerrorbells
+set nowrap
+set noswapfile
+set nobackup
+set undodir=~/.vim/undodir
+set undofile
 
-let g:minBufExplForceSyntaxEnable = 1
-" python from powerline.vim import setup as powerline_setup
-" python powerline_setup()
-" python del powerline_setup
+" Give more space for displaying messages.
+set cmdheight=2
 
-if ! has('gui_running')
-   set ttimeoutlen=10
-   augroup FastEscape
-      autocmd!
-      au InsertEnter * set timeoutlen=0
-      au InsertLeave * set timeoutlen=1000
-   augroup END
-endif
+" Having longer updatetime (default is 4000 ms = 4 s) leads to noticeable
+" delays and poor user experience.
+set updatetime=50
 
-" Set the color scheme. Change this to your preference.
-" Here's 100 to choose from:
-" solarized options
-let g:solarized_termcolors = 16
-syntax enable
-set background=dark
-colorscheme hybrid
+" set colorcolumn=80
+" highlight ColorColumn ctermbg=0 guibg=lightgrey
+set signcolumn=yes
+
+set termguicolors
 
 " These lines setup the environment to show graphics and colors correctly.
 set rtp+=~/.vim/bundle/powerline/powerline/bindings/vim
 
-set laststatus=2 " Always display the statusline in all windows
-set guifont=DejaVu\ Sans\ Mono\ for\ Powerline:h14
+" Set font type and size. Depends on the resolution. Larger screens, prefer h20
+set guifont=Fira\ Code:h12
 set noshowmode " Hide the default mode text (e.g. -- INSERT -- below the statusline)
 
 " Write the old file out when switching between files.
@@ -80,37 +41,32 @@ set encoding=utf-8
 set visualbell
 " Display current cursor position in lower right corner.
 set ruler
-set scrolloff=3                                              " show context above/below cursorline
+set scrolloff=8                                              " show context above/below cursorline
 " Ever notice a slight lag after typing the leader key + command? This lowers
 set timeoutlen=500
 " Switch between buffers without saving
 set hidden
 
-" Set font type and size. Depends on the resolution. Larger screens, prefer h20
-set guifont=Menlo:h13
 " Tab stuff
 set tabstop=2
-set shiftwidth=2
 set softtabstop=2
+set shiftwidth=2
 set expandtab
-set wildignore=log/**,node_modules/**,target/**,tmp/**,*.rbc,*.so,*.swp,*.zip
+" Indent stuff
+set smartindent
+set autoindent
 set wildmenu                                                 " show a navigable menu for tab completion
 " Show command in bottom right portion of the screen
 set showcmd
 " Show lines numbers
 set number
 " Prefer relative line numbering?
-" set relativenumber
-" Indent stuff
-set smartindent
-set autoindent
+set relativenumber
 " Always show the status line
 set laststatus=2
 " Prefer a slightly higher line height
 " set linespace=3
-" Better line wrapping
-set wrap
-set textwidth=79
+" set textwidth=79
 set formatoptions=qrn1
 " Set incremental searching
 set incsearch
@@ -121,51 +77,109 @@ set hlsearch
 " case insensitive search
 set ignorecase
 set smartcase
-" Hide MacVim toolbar by default
-set go-=T
+
 " Enable code folding
 set foldenable
 " Hide mouse when typing
 set mousehide
 " Enable basic mouse behavior such as resizing buffers.
 set mouse=a
-if exists('$TMUX')  " Support resizing in tmux
+if exists('$TMUX') && !has('nvim')  " Support resizing in tmux
   set ttymouse=xterm2
 endif
 " Split windows below the current window.
 set splitbelow
 "  session settings
 set sessionoptions=resize,winpos,winsize,buffers,tabpages,folds,curdir,help
-"  More useful command-line completion
-set wildmenu
 " Auto-completion menu
 set wildmode=longest,list,full
 " http://vim.wikia.com/wiki/Make_Vim_completion_popup_menu_work_just_like_in_an_IDE
-set completeopt=longest,menuone
+set completeopt=menuone,noinsert,noselect
 set diffopt=vertical
 " Terminal only
 set modelines=1
-set laststatus=2 " required for airline
+" Don't pass messages to |ins-completion-menu|.
+set shortmess+=c
+set path=.,packages/shared/src
+
+" set up pathogen, https://github.com/tpope/vim-pathogen
+set shell=zsh
+set nocompatible
+filetype off
+
+call plug#begin('~/.vim/plugged')
+  " color scheme
+  Plug 'gruvbox-community/gruvbox'
+  Plug 'sainnhe/gruvbox-material'
+  Plug 'flazz/vim-colorschemes'
+  " Enable after Neovim 0.5
+  "Plug 'nvim-lua/popup.nvim'
+  "Plug 'nvim-lua/plenary.nvim'
+  "Plug 'nvim-telescope/telescope.nvim'
+
+  " fuzzy search
+  Plug 'junegunn/fzf'
+  Plug 'junegunn/fzf.vim'
+  " fzf is more modern than ctrlp
+  Plug 'neoclide/coc.nvim', { 'branch': 'release' }
+  Plug 'sheerun/vim-polyglot'
+  Plug 'scrooloose/nerdtree'
+  Plug 'kevinhwang91/rnvimr', {'do': 'make sync'}
+  Plug 'rbgrouleff/bclose.vim'
+  Plug 'tpope/vim-surround'
+  Plug 'tpope/vim-unimpaired'
+  Plug 'tpope/vim-repeat'
+  Plug 'tpope/vim-fugitive'
+  Plug 'scrooloose/nerdcommenter'
+  Plug 'ElmCast/elm-vim'
+  Plug 'pangloss/vim-javascript'
+  Plug 'derekwyatt/vim-scala'
+  Plug 'prettier/vim-prettier'
+  Plug 'JamshedVesuna/vim-markdown-preview'
+  Plug 'gagoar/StripWhiteSpaces'
+  Plug 'editorconfig/editorconfig-vim'
+  Plug 'mbbill/undotree'
+  Plug 'vim-airline/vim-airline'
+  Plug 'christoomey/vim-tmux-navigator'
+  "Plug 'leafgarland/typescript-vim'
+  "Plug 'mxw/vim-jsx'
+  "Plug 'mattn/emmet-vim'
+  "Choose Syntastic vs ALE for linting
+  "Plug 'vim-syntastic/syntastic'
+  "Plug 'burnettk/vim-angular'
+  "Plug 'airblade/vim-gitgutter'
+  "Plug 'janko-m/vim-test'
+call plug#end()
+
+filetype plugin indent on
+
+set background=dark
+highlight Normal guibg=none
+colorscheme gruvbox
+
+let g:gruvbox_contrast_dark = 'hard'
+if exists('+termguicolors')
+    let &t_8f = "\<Esc>[38;2;%lu;%lu;%lum"
+    let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
+endif
+let g:gruvbox_invert_selection='0'
+
+if executable('rg')
+    let g:rg_derive_root='true'
+endif
+
+let g:minBufExplForceSyntaxEnable = 1
+let g:airline_powerline_fonts = 1
+let g:airline#extensions#tabline#enabled = 1
+let g:airline#extensions#tabline#buffer_nr_show = 1
 
 " Want a different map leader than
 let mapleader = ","
 map <leader>l :Align
-nmap <leader>] :TagbarToggle<CR>
 nmap <leader><space> :StripWhiteSpaces<CR>
-nmap <leader>g :GitGutterToggle<CR>
-nmap <leader>c <Plug>Kwbd
 map <silent> <leader>V :source ~/.vimrc<CR>:filetype detect<CR>:exe ":echo 'vimrc reloaded'"<CR>
-" Faster shortcut for commenting. Requires T-Comment plugin
-" map <leader>c <c-_><c-_>
 " Opens a vertical split and switches over (\v)
 nnoremap <leader>v <C-w>v<C-w>l
-" Set up an HTML5 template for all new .html files
-autocmd BufNewFile * silent! 0r $VIMHOME/templates/%:e.tpl
-autocmd BufRead,BufNewFile *.md set filetype=markdown
-" use xml syntax highlighting for .soy
-autocmd BufNewFile,BufRead *.soy set filetype=xml
-" automatically rebalance windows on vim resize
-autocmd VimResized * :wincmd =
 " Saves time; maps the spacebar to colon
 nmap <space> :
 " Automatically change current directory to that of the file in the buffer
@@ -178,19 +192,7 @@ imap jj <esc>
 nmap <silent> ,da :exec "1," . bufnr('$') . "bd"<cr>
 " Bubble single lines (kicks butt)
 " http://vimcasts.org/episodes/bubbling-text/
-nmap <C-Up> ddkP
-nmap <C-Down> ddp
-" Bubble multiple lines
-vmap <C-Up> xkP`[V`]
-vmap <C-Down> xp`[V`]
-" Source the vimrc file after saving it. This way, you don't have to reload
-" Vim to see the changes.
-if has("autocmd")
- augroup myvimrchooks
-  au!
-  autocmd bufwritepost .vimrc source ~/.vimrc
- augroup END
-endif
+
 " easier window navigation
 nmap <C-h> <C-w>h
 nmap <C-j> <C-w>j
@@ -199,8 +201,14 @@ nmap <C-l> <C-w>l
 " "------------------------"
 " "NERDTREE PLUGIN SETTINGS
 " "------------------------"
+let NERDTreeShowHidden=1
+let NERDTreeIgnore = ['\.DS_Store', '\.idea', '\.git']
 nmap <leader>d :NERDTreeToggle<CR>
 nmap <leader>f :NERDTreeFind<CR>
+
+" Ranger settings
+let g:NERDTreeHijackNetrw = 1
+let g:ranger_replace_netrw = 1 "open ranger when vim open a directory
 
 " invert line numbers display
 nmap <leader>n :set invnumber<CR>
@@ -234,17 +242,7 @@ nmap <leader>bv :bel vsp
 inoremap <expr><TAB>  pumvisible() ? "\<C-n>" : "\<TAB>"
 inoremap <expr><S-TAB>  pumvisible() ? "\<C-p>" : "\<S-TAB>"
 
-" lint js
-" autocmd bufwritepost *.js !jshint <afile>
-
-" syntastic settings
-let g:syntastic_always_populate_loc_list = 1
-let g:syntastic_auto_loc_list = 0
-let g:syntastic_check_on_open = 0
-let g:syntastic_check_on_wq = 1
-
-let g:syntastic_javascript_checkers = ['eslint']
-let g:syntastic_javascript_eslint_exe = '$(npm bin)/eslint'
+nnoremap <leader>u :UndotreeShow<CR>
 
 " Elm bindings
 nnoremap <leader>el :ElmEvalLine<CR>
@@ -252,60 +250,18 @@ vnoremap <leader>es :<C-u>ElmEvalSelection<CR>
 nnoremap <leader>em :ElmMakeCurrentFile<CR>
 " au BufWritePost *.elm ElmMakeFile("Main.elm")
 
-" For ctrlp.vim
-let g:ctrlp_custom_ignore = '\v[\/]\.(git|hg|svn)$'
-let g:ctrlp_match_window = 'bottom,order:btt,min:1,max:10,results:30'
+set wildignore+=*/node_modules/*,*/tmp/*,*.so,*.swp,*.zip     " Linux/MacOSX
 set wildignore+=*/generated/*
 set wildignore+=*.gz
 
-set tags+=./app/tags,./build/tags,tags
-
-"-------------------------
-" Ag
-"-------------------------
-map <Leader>f <ESC>:tabnew<CR>:Ag
-map <Leader>F <ESC>:Ag
-map <Leader>fs <ESC>:tabnew<CR>:AgFromSearch<CR>
-
-"-------------------------
-" YouCompleteMe
-"-------------------------
-let g:ycm_complete_in_strings = 1
-let g:ycm_collect_identifiers_from_comments_and_strings = 1
-let g:ycm_collect_identifiers_from_tags_files = 1
-
-"-------------------------
-"" NERDTree
-"-------------------------
-let NERDTreeIgnore = ['\.DS_Store', '\.idea', '\.git']
-"let NERDTreeQuitOnOpen = 1
-map <Leader>d :NERDTreeToggle<CR>
-map <Leader>D :NERDTreeFind<CR>
-
 " Markdown browser hotkey
-let vim_markdown_preview_hotkey='<C-M>'
-
-" Prettier: Run before saving async
-let g:prettier#autoformat = 0
-" autocmd BufWritePre *.js,*.jsx,*.mjs,*.ts,*.tsx,*.css,*.less,*.scss,*.json,*.graphql,*.md,*.vue PrettierAsync
-
-" Prettier default: false
-let g:prettier#config#single_quote = 'false'
-
-" Prettier default: true
-let g:prettier#config#bracket_spacing = 'true'
-
-" Prettier default: false
-let g:prettier#config#jsx_bracket_same_line = 'false'
-
-" Prettier default: avoid
-let g:prettier#config#arrow_parens = 'avoid'
-
-" Prettier default: none
-let g:prettier#config#trailing_comma = 'false'
-
-" Prettier default: babylon
-let g:prettier#config#parser = 'babylon'
+let vim_markdown_preview_toggle=1
+let vim_markdown_preview_hotkey='<C-m>'
+let vim_markdown_preview_browser='Google Chrome'
+" Requires network connecion, use perl when offline
+let vim_markdown_preview_github=1
+"let vim_markdown_preview_perl=1
+let vim_markdown_preview_temp_file=1
 
 " Emmet
 let g:user_emmet_settings = {
@@ -314,46 +270,111 @@ let g:user_emmet_settings = {
     \  },
   \}
 
-"---------------------------
-""" Ale
-"let g:ale_linters = {
-"            \ 'javascript': [],
-"            \}
-"let g:ale_fixers = {
-"            \ 'javascript': ['prettier'],
-"            \}
-"let g:ale_fix_on_save = 1
-"nmap <silent> [W <Plug>(ale_first)
-"nmap <silent> [w <Plug>(ale_previous)
-"nmap <silent> ]w <Plug>(ale_next)
-"nmap <silent> ]W <Plug>(ale_last)
+"" fzf
+nnoremap <C-p> :GFiles<CR>
+nmap <Leader>t :GFiles<CR>
+nmap <Leader>b :Buffers<CR>
+nmap <Leader>r :Tags<CR>
+nnoremap <Leader>ps :Rg<SPACE>
+nnoremap <Leader>pf :Files<CR>
 
-" TODO
+command! -bang -nargs=* Find call fzf#vim#grep('rg --column --line-number --no-heading --fixed-strings --ignore-case --no-ignore --hidden --follow --glob "!.git/*" --color "always" '.shellescape(<q-args>), 1, <bang>0)
+nnoremap <leader>j :call fzf#vim#tags("'".expand('<cword>'))<cr>
+
+" surround word with quotes
+nnoremap <Leader>q" ysiw"<CR>
+
+" Sweet Sweet FuGITive
+nmap <leader>gl :diffget //3<CR>
+nmap <leader>ga :diffget //2<CR>
+nmap <leader>gs :G<CR>
+
+" CoC configs
+let g:coc_global_extensions = [
+  \ 'coc-tsserver'
+  \ ]
+if isdirectory('./node_modules') && isdirectory('./node_modules/prettier')
+  let g:coc_global_extensions += ['coc-prettier']
+endif
+
+if isdirectory('./node_modules') && isdirectory('./node_modules/eslint')
+  let g:coc_global_extensions += ['coc-eslint']
+endif
+
+nmap <leader>gd <Plug>(coc-definition)
+nmap <leader>gy <Plug>(coc-type-definition)
+nmap <leader>gi <Plug>(coc-implementation)
+nmap <leader>gr <Plug>(coc-references)
+nmap <leader>rr <Plug>(coc-rename)
+nmap <leader>g[ <Plug>(coc-diagnostic-prev)
+nmap <leader>g] <Plug>(coc-diagnostic-next)
+nmap <silent> <leader>gp <Plug>(coc-diagnostic-prev-error)
+nmap <silent> <leader>gn <Plug>(coc-diagnostic-next-error)
+nnoremap <leader>cr :CocRestart
+
+" Use tab for trigger completion with characters ahead and navigate.
+" NOTE: Use command ':verbose imap <tab>' to make sure tab is not mapped by
+" other plugin before putting this into your config.
+inoremap <silent><expr> <TAB>
+            \ pumvisible() ? "\<C-n>" :
+            \ <SID>check_back_space() ? "\<TAB>" :
+            \ coc#refresh()
+
+function! s:check_back_space() abort
+  let col = col('.') - 1
+  return !col || getline('.')[col - 1]  =~# '\s'
+endfunction
+
+command! -nargs=0 Prettier :CocCommand prettier.formatFile
+
+inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
+" Use <c-space> to trigger completion.
+inoremap <silent><expr> <C-space> coc#refresh()
+
+" code actions on word under cursor
+nmap <leader>do <Plug>(coc-codeaction)
+
+" Symbol renaming.
+nmap <leader>rn <Plug>(coc-rename)
+
+" Formatting selected code.
+xmap <leader>f  <Plug>(coc-format-selected)
+
+" search word under cursor
+nnoremap <leader>k :exe 'Ag!' expand('<cword>')<cr>
+
 " These should go in the work machine's .vimrc.local
 command! JSON :%!python -m json.tool
 command! JSCS :%!jscs -x %
 
-"--
-"" fzf
-nnoremap <C-p> :<C-u>FZF<CR>
-nmap ; :Buffers<CR>
-nmap <Leader>t :Files<CR>
-nmap <Leader>r :Tags<CR>
+" AutoCommands
 
-" Go crazy!
-if filereadable(expand("~/.vimrc.local"))
-  " In your .vimrc.local, you might like:
-  "
-  " set autowrite
-  " set nocursorline
-  " set nowritebackup
-  " set whichwrap+=<,>,h,l,[,] " Wrap arrow keys between lines
-  "
-  " autocmd! bufwritepost .vimrc source ~/.vimrc
-  " noremap! jj <ESC>
-  source ~/.vimrc.local
+if ! has('gui_running')
+   set ttimeoutlen=10
+   augroup FastEscape
+      autocmd!
+      au InsertEnter * set timeoutlen=0
+      au InsertLeave * set timeoutlen=1000
+   augroup END
 endif
 
-set exrc
-set secure
+" Set up an HTML5 template for all new .html files
+autocmd BufNewFile * silent! 0r $VIMHOME/templates/%:e.tpl
+autocmd BufRead,BufNewFile *.md set filetype=markdown
+" automatically rebalance windows on vim resize
+autocmd VimResized * :wincmd =
+
+" Source the vimrc file after saving it. This way, you don't have to reload
+" Vim to see the changes.
+if has("autocmd")
+ augroup myvimrchooks
+  au!
+  autocmd bufwritepost .vimrc source ~/.vimrc
+ augroup END
+endif
+
+au BufRead,BufNewFile *.sbt,*.sc set filetype=scala
+
+" Highlight the symbol and its references when holding the cursor.
+autocmd CursorHold * silent call CocActionAsync('highlight')
 
