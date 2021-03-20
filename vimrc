@@ -4,7 +4,7 @@ set nocompatible
 filetype off
 
 " set the runtime path to include Vundle and initialize
-set rtp+=/Users/marcm/.vim/bundle/Vundle.vim
+set rtp+=/Users/marcmauger/.vim/bundle/Vundle.vim
 set rtp+=/usr/local/opt/fzf
 call vundle#begin()
   Plugin 'gmarik/Vundle.vim'
@@ -16,9 +16,8 @@ call vundle#begin()
   Plugin 'tpope/vim-fugitive'
   Plugin 'tpope/vim-projectionist'
   Plugin 'tpope/vim-dispatch.git'
-  Plugin 'altercation/vim-colors-solarized'
   Plugin 'mileszs/ack.vim'
-  Plugin 'Valloric/YouCompleteMe'
+ "  Plugin 'Valloric/YouCompleteMe'
   Plugin 'scrooloose/nerdcommenter'
   Plugin 'ElmCast/elm-vim'
   Plugin 'burnettk/vim-angular'
@@ -38,6 +37,7 @@ call vundle#begin()
   Plugin 'junegunn/fzf.vim'
   Plugin 'airblade/vim-gitgutter'
   Plugin 'janko-m/vim-test'
+  Plugin 'rafi/awesome-vim-colorschemes'
 call vundle#end()            " required
 filetype plugin indent on
 
@@ -61,7 +61,7 @@ endif
 let g:solarized_termcolors = 16
 syntax enable
 set background=dark
-colorscheme solarized
+colorscheme hybrid
 
 " These lines setup the environment to show graphics and colors correctly.
 set rtp+=~/.vim/bundle/powerline/powerline/bindings/vim
