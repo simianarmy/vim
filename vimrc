@@ -120,6 +120,7 @@ call plug#begin('~/.vim/plugged')
   " fuzzy search
   Plug 'junegunn/fzf'
   Plug 'junegunn/fzf.vim'
+  Plug 'wookayin/fzf-ripgrep.vim'
   " fzf is more modern than ctrlp
   Plug 'neoclide/coc.nvim', { 'branch': 'release' }
   Plug 'sheerun/vim-polyglot'
