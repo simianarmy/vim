@@ -120,6 +120,7 @@ call plug#begin('~/.vim/plugged')
   " fuzzy search
   Plug 'junegunn/fzf'
   Plug 'junegunn/fzf.vim'
+  Plug 'wookayin/fzf-ripgrep.vim'
   " fzf is more modern than ctrlp
   Plug 'neoclide/coc.nvim', { 'branch': 'release' }
   Plug 'sheerun/vim-polyglot'
@@ -135,7 +136,7 @@ call plug#begin('~/.vim/plugged')
   Plug 'pangloss/vim-javascript'
   Plug 'derekwyatt/vim-scala'
   Plug 'prettier/vim-prettier'
-  Plug 'JamshedVesuna/vim-markdown-preview'
+  Plug 'iamcco/markdown-preview.nvim', { 'do': { -> mkdp#util#install() }, 'for': ['markdown', 'vim-plug']}
   Plug 'gagoar/StripWhiteSpaces'
   Plug 'editorconfig/editorconfig-vim'
   Plug 'mbbill/undotree'
@@ -222,18 +223,6 @@ nmap <leader>hm :cd ~/ <CR>
 " Shortcut to opening a virtual split to right of current pane
 " Makes more sense than opening to the left
 nmap <leader>bv :bel vsp
-" Saves file when Vim window loses focus
-" au FocusLost * :wa
-" " Backups
-"set backupdir=~/.vim/tmp/backup/ " backups
-"set directory=~/.vim/tmp/swap/ " swap files
-"set backup " enable backup
-" " No more stretching for navigating files
-"noremap h ;
-"noremap j h
-"noremap k gj
-"noremap l gk
-"noremap ; l
 "set showmatch " show matching brackets
 
 "-------------------------
@@ -241,8 +230,6 @@ nmap <leader>bv :bel vsp
 "-------------------------
 inoremap <expr><TAB>  pumvisible() ? "\<C-n>" : "\<TAB>"
 inoremap <expr><S-TAB>  pumvisible() ? "\<C-p>" : "\<S-TAB>"
-
-nnoremap <leader>u :UndotreeShow<CR>
 
 " Elm bindings
 nnoremap <leader>el :ElmEvalLine<CR>
@@ -253,15 +240,6 @@ nnoremap <leader>em :ElmMakeCurrentFile<CR>
 set wildignore+=*/node_modules/*,*/tmp/*,*.so,*.swp,*.zip     " Linux/MacOSX
 set wildignore+=*/generated/*
 set wildignore+=*.gz
-
-" Markdown browser hotkey
-let vim_markdown_preview_toggle=1
-let vim_markdown_preview_hotkey='<C-m>'
-let vim_markdown_preview_browser='Google Chrome'
-" Requires network connecion, use perl when offline
-let vim_markdown_preview_github=1
-"let vim_markdown_preview_perl=1
-let vim_markdown_preview_temp_file=1
 
 " Emmet
 let g:user_emmet_settings = {
@@ -342,6 +320,28 @@ xmap <leader>f  <Plug>(coc-format-selected)
 
 " search word under cursor
 nnoremap <leader>k :exe 'Ag!' expand('<cword>')<cr>
+
+" Yank to end of line
+nnoremap Y y$
+
+" Keep <next> centered
+nnoremap n nzzzv
+nnoremap  Nzzzv
+nnoremap J mzJ`z
+
+" Undo break points
+inoremap , ,<c-g>u
+inoremap . .<c-g>u
+inoremap ! !<c-g>u
+inoremap ? ?<c-g>u
+
+" Moving lines
+vnoremap J :m '>+1<CR>gv=gv
+vnoremap K :m '<-2<CR>gv=gv
+inoremap <C-j> <esc>:m .+1<CR>==
+inoremap <C-k> <esc>:m .-2<CR>==
+nnoremap <leader>k :m .-2<CR>==
+nnoremap <leader>j :m .+1<CR>==
 
 " These should go in the work machine's .vimrc.local
 command! JSON :%!python -m json.tool
