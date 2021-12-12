@@ -112,10 +112,13 @@ call plug#begin('~/.vim/plugged')
   Plug 'gruvbox-community/gruvbox'
   Plug 'sainnhe/gruvbox-material'
   Plug 'flazz/vim-colorschemes'
-  " Enable after Neovim 0.5
+  " Enable after Neovim 0.5 for Telescope
   "Plug 'nvim-lua/popup.nvim'
   "Plug 'nvim-lua/plenary.nvim'
   "Plug 'nvim-telescope/telescope.nvim'
+
+  " Enable after Neovim 0.6
+  " Plug 'newvim/nvim-lspconfig'
 
   " fuzzy search
   Plug 'junegunn/fzf'
@@ -319,7 +322,7 @@ nmap <leader>rn <Plug>(coc-rename)
 xmap <leader>f  <Plug>(coc-format-selected)
 
 " search word under cursor
-nnoremap <leader>k :exe 'Ag!' expand('<cword>')<cr>
+nnoremap <e texteader>k :exe 'Ag!' expand('<cword>')<cr>
 
 " Yank to end of line
 nnoremap Y y$
