@@ -145,6 +145,8 @@ call plug#begin('~/.vim/plugged')
   Plug 'mbbill/undotree'
   Plug 'vim-airline/vim-airline'
   Plug 'christoomey/vim-tmux-navigator'
+  Plug 'rust-lang/rust.vim'
+  Plug 'prettier/vim-prettier', { 'do': 'npm install', 'for': ['php'] }
   "Plug 'leafgarland/typescript-vim'
   "Plug 'mxw/vim-jsx'
   "Plug 'mattn/emmet-vim'
@@ -243,6 +245,20 @@ nnoremap <leader>em :ElmMakeCurrentFile<CR>
 set wildignore+=*/node_modules/*,*/tmp/*,*.so,*.swp,*.zip     " Linux/MacOSX
 set wildignore+=*/generated/*
 set wildignore+=*.gz
+
+" Rust
+let g:rustfmt_autosave = 1
+let g:rustfmt_emit_files = 1
+let g:rustfmt_fail_silently = 0
+
+" Markdown browser hotkey
+let vim_markdown_preview_toggle=1
+let vim_markdown_preview_hotkey='<C-m>'
+let vim_markdown_preview_browser='Google Chrome'
+" Requires network connecion, use perl when offline
+let vim_markdown_preview_github=1
+"let vim_markdown_preview_perl=1
+let vim_markdown_preview_temp_file=1
 
 " Emmet
 let g:user_emmet_settings = {
@@ -350,6 +366,9 @@ nnoremap <leader>j :m .+1<CR>==
 command! JSON :%!python -m json.tool
 command! JSCS :%!jscs -x %
 
+" shortcut to clear last search highlighting
+:command C let @/=""
+
 " AutoCommands
 
 if ! has('gui_running')
@@ -366,6 +385,8 @@ autocmd BufNewFile * silent! 0r $VIMHOME/templates/%:e.tpl
 autocmd BufRead,BufNewFile *.md set filetype=markdown
 " automatically rebalance windows on vim resize
 autocmd VimResized * :wincmd =
+
+"autocmd BufWritePre *.php PrettierAsync
 
 " Source the vimrc file after saving it. This way, you don't have to reload
 " Vim to see the changes.
