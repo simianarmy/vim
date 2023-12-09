@@ -107,6 +107,10 @@ set shell=zsh
 set nocompatible
 filetype off
 
+" python formatting - read this https://github.com/averms/black-nvim
+" Must be before Plug statement
+let g:python3_host_prog = $HOME . '/.local/venv/nvim/bin/python'
+
 call plug#begin('~/.vim/plugged')
   " color scheme
   Plug 'gruvbox-community/gruvbox'
@@ -275,8 +279,24 @@ nmap <Leader>r :Tags<CR>
 nnoremap <Leader>ps :Rg<SPACE>
 nnoremap <Leader>pf :Files<CR>
 
+" Do we use this?
 command! -bang -nargs=* Find call fzf#vim#grep('rg --column --line-number --no-heading --fixed-strings --ignore-case --no-ignore --hidden --follow --glob "!.git/*" --color "always" '.shellescape(<q-args>), 1, <bang>0)
-nnoremap <leader>j :call fzf#vim#tags("'".expand('<cword>'))<cr>
+
+" Ripgrep advanced - performs search instead of fzf
+function! RipgrepFzf(query, fullscreen)
+  let command_fmt = 'rg --column --line-number --no-heading --color=always --smart-case %s || true'
+  let initial_command = printf(command_fmt, shellescape(a:query))
+  let reload_command = printf(command_fmt, '{q}')
+  let spec = {'options': ['--phony', '--query', a:query, '--bind', 'change:reload:'.reload_command]}
+  call fzf#vim#grep(initial_command, 1, fzf#vim#with_preview(spec), a:fullscreen)
+endfunction
+command! -nargs=* -bang RG call RipgrepFzf(<q-args>, <bang>0)
+
+" Git grep wrapper
+command! -bang -nargs=* GGrep
+  \ call fzf#vim#grep(
+  \   'git grep --line-number -- '.shellescape(<q-args>), 0,
+  \   fzf#vim#with_preview({'dir': systemlist('git rev-parse --show-toplevel')[0]}), <bang>0)
 
 " surround word with quotes
 nnoremap <Leader>q" ysiw"<CR>
@@ -360,7 +380,7 @@ vnoremap K :m '<-2<CR>gv=gv
 inoremap <C-j> <esc>:m .+1<CR>==
 inoremap <C-k> <esc>:m .-2<CR>==
 nnoremap <leader>k :m .-2<CR>==
-nnoremap <leader>j :m .+1<CR>==
+nnoremap <leader>jj :m .+1<CR>==
 
 " These should go in the work machine's .vimrc.local
 command! JSON :%!python -m json.tool
